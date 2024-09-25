@@ -1,0 +1,38 @@
+{{- range $key, $val := .Values.frontend }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $key }}-svc
+spec:
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+    name: http
+  selector:
+    app: {{ $key }}-dep
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $key }}-ing
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/rule-type: PathPrefix
+spec:
+  rules:
+    - host: {{ $val.host }}
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ $key }}-svc
+              port:
+                name: http
+{{ end }}
+

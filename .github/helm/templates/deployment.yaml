@@ -1,0 +1,36 @@
+{{- range $key, $val := .Values.frontend }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $key }}-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ $key }}-dep
+  template:
+    metadata:
+      labels:
+        app: {{ $key }}-dep
+    spec:
+      # hostAliases:
+      # {{- range  $el := $val.dns }}
+      # - ip: {{ $el.ip }}
+      #   hostnames:
+      #   - {{ $el.host }}
+      # {{- end }}    
+      containers:
+      - image: {{ $val.image }}:{{ $val.tag }}
+        imagePullPolicy: Always
+        name: {{ $key }}
+        # env:
+        # - name: "BACKEND_URI"
+        #   value: {{ $val.backend_url }}
+        # - name: "PROXY_ADDRESS_FORWARDING"
+        #   value: "true"
+        ports:
+          - name: http
+            containerPort: 3000
+            protocol: TCP
+{{- end }}
