@@ -24,8 +24,8 @@ jobs:
       - name: Plot inputs
         run: |
           echo "environment is ${{ inputs.environment }}"
-      - name: PWD dir
-        run: pwd
+      - name: Install dependencies
+        run: npm install
       - name: Run Picsrate Tests
         run: npm test
       - name: Build and tag Docker image
