@@ -15,6 +15,7 @@ spec:
     spec:
       containers:
         - name: picsrate-ui-dep
-          image: studio-registry:5000/picsrate-ui:latest
+          image: studio-registry:5000/picsrate-ui
+          tag: latest
           ports:
             - containerPort: 3000

@@ -24,6 +24,7 @@ jobs:
       - name: Plot inputs
         run: |
           echo "environment is ${{ inputs.environment }}"
+          echo "version is ${{ env.VERSION }}"
       - name: Install dependencies
         run: npm install
       - name: Run Picsrate Tests
@@ -36,4 +37,4 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           sudo kubectl delete -f ./.github/dep.yaml
-          sudo kubectl apply -f ./.github/dep.yaml
+          sudo kubectl apply -f ./.github/dep.yaml --patch '{"spec": {"template": {"spec": {"containers":{"tag":${{ env.VERSION }}}}}}}'
