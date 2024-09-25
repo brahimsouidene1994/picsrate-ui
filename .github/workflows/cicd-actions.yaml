@@ -31,9 +31,9 @@ jobs:
       - name: Build and tag Docker image
         run: |
           sudo docker build -t picsrate-ui:latest . 
-          sudo docker tag picsrate-ui:latest studio-registry:5000/picsrate-ui:latest
-          sudo docker push studio-registry:5000/picsrate-ui:latest
-      - name: Delete old pod
-        run: sudo kubectl delete -f ./.github/dep.yaml
+          sudo docker tag picsrate-ui:latest studio-registry:5000/picsrate-ui:${{ env.VERSION }}
+          sudo docker push studio-registry:5000/picsrate-ui:${{ env.VERSION }}
       - name: Deploy to Kubernetes
-        run: sudo kubectl apply -f ./.github/dep.yaml
+        run: |
+          sudo kubectl delete -f ./.github/dep.yaml
+          sudo kubectl apply -f ./.github/dep.yaml
