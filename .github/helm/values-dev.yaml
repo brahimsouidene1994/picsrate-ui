@@ -1,0 +1,11 @@
+frontend:
+  picsrate-ui:
+    image: "studio-registry:5000/picsrate-ui"
+    tag: "latest"
+    # host: "falcone.dev.alphalab.cloud"
+    # backend_url: "http://falcone-api-svc"
+    # dns:
+    # - ip: "192.168.1.102"
+    #   host: "keycloak.dev.alphalab.cloud"
+    # - ip: "197.27.125.248"
+    #   host: "keycloak.dev.alphalab.cloud"
