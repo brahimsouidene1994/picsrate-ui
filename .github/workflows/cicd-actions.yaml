@@ -21,10 +21,11 @@ jobs:
       - name: Create environment file
         run: |
           echo "VERSION=$(cat version.json | jq -r .version | sed -r "s/[x]+/${{ github.run_number }}/g")" >> $GITHUB_ENV
-
       - name: Plot inputs
         run: |
           echo "environment is ${{ inputs.environment }}"
+      - name: PWD dir
+        run: pwd
       - name: Run Picsrate Tests
         run: npm test
       - name: Build and tag Docker image
