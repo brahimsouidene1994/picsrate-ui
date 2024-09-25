@@ -39,5 +39,5 @@ jobs:
         #   sudo kubectl delete -f ./.github/dep.yaml
         #   sudo kubectl apply -f ./.github/dep.yaml --patch '{"spec": {"template": {"spec": {"containers":{"tag":${{ env.VERSION }}}}}}}'
         run: |
-          helm delete picsrate-ui-dep -n studio-qa --ignore-not-found || true
-          helm upgrade --install -f .github/helm/values-${{ inputs.environment }}.yaml --set frontend.picsrate-ui.tag=${{ env.VERSION }} picsrate-ui-dep  .github/helm -n studio-qa
+          helm uninstall picsrate-ui -n studio-qa --ignore-not-found || true
+          helm upgrade --install -f .github/helm/values-${{ inputs.environment }}.yaml --set frontend.picsrate-ui.tag=${{ env.VERSION }} picsrate-ui  .github/helm -n studio-qa
