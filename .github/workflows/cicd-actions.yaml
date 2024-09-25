@@ -1,18 +1,36 @@
 name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+run-name: "${{ github.actor }}: ${{ inputs.environment }} -  ${{ github.run_number }}"
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: pick environment
+        default: dev
+        options:
+          - dev
+          # - qa
+          # - prod
+
 jobs:
-  Explore-GitHub-Actions:
+  run-project-tests:
     runs-on: self-hosted
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      - uses: actions/checkout@v3
+
+      - name: Create environment file
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          echo "VERSION=$(cat version.json | jq -r .version | sed -r "s/[x]+/${{ github.run_number }}/g")" >> $GITHUB_ENV
+
+      - name: Plot inputs
+        run: |
+          echo "environment is ${{ inputs.environment }}"
+      - name: Run Picsrate Tests
+        run: |
+          chmod +x gradlew
+          npm test
+      - name: Build and tag Docker image
+        run: |
+          docker build -t picsrate-ui:latest . 
+          docker tag picsrate-ui:latest studio-registry:5000/picsrate-ui:latest
+          docker push studio-registry:5000/picsrate-ui:latest
