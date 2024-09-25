@@ -26,9 +26,7 @@ jobs:
         run: |
           echo "environment is ${{ inputs.environment }}"
       - name: Run Picsrate Tests
-        run: |
-          chmod +x gradlew
-          npm test
+        run: npm test
       - name: Build and tag Docker image
         run: |
           docker build -t picsrate-ui:latest . 
