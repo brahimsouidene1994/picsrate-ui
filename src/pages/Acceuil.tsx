@@ -1,5 +1,5 @@
 import React from 'react';
-import '../assets/styles/Acceuil.css'; 
+import '../assets/styles/Acceuil.css';
 import logo from '../assets/images/appstore.png';
 import imgAppStore from '../assets/images/appbtnstore.png';
 import imgPlayStore from '../assets/images/playstore.png';
@@ -8,24 +8,35 @@ import iconSocial from '../assets/images/link-svgrepo-com.svg';
 import iconDating from '../assets/images/gender-svgrepo-com.svg';
 import { ButtonContainer } from '../component/Button'
 import { Link } from 'react-router-dom';
+import keycloak from '../keycloak';
 import ReactPlayer from 'react-player';
-export default function Acceuil() {
-    React.useEffect(()=>{
-        window.alert("Sorry!! I'm still working on deployment phase but you can watch the pre release of the app if you scroll down :) & if you want to contact me this is my email souidenebrahim@gmail.com");
-    },[])
-    
+
+type PropsAuth = {
+    auth: boolean,
+}
+export default function Acceuil({ auth }: PropsAuth) {
+    React.useEffect(() => {
+        // window.alert("Sorry!! I'm still working on deployment phase but you can watch the pre release of the app if you scroll down :) & if you want to contact me this is my email souidenebrahim@gmail.com");
+    }, [])
+
+    const handleLogin = () => {
+        keycloak.login();
+    }
+    const handleLogout = () => {
+        keycloak.logout();
+    }
     return (
         <div className='page-acceuil'>
             <div className='container'>
-                <img className='logo' src={logo} alt='logo'/>
+                <img className='logo' src={logo} alt='logo' />
                 {/* <h1 className='title'>Pics rate</h1> */}
-                <p className='description'>
-                    Pics Rate {' ( or pictures rating ) '} is a great app that helps you to choose the perfect picture. 
+                {/* <p className='description'>
+                    Pics Rate {' ( or pictures rating ) '} is a great app that helps you to choose the perfect picture.
                     Usualy people get confused about which picture shoeld use in specific context.
                     So, this application gives you the opportunity to let others choose for you by the voting system.
                     You just need to upload the picture you want and choose the context for what you are go in to need it for,
                     then peoples will vote and gives you notes for it.
-                </p>
+                </p> */}
             </div>
             <div className='app-links'>
                 <div className='btns-section'>
@@ -33,11 +44,11 @@ export default function Acceuil() {
                     <p className='second-text'>Let peoples help you with that {':)'}</p>
                     <p className='third-text'>Download the app now!</p>
                     <div className='btns-download'>
-                         {/* <a href='#' target='_blank' rel="noreferrer"> */} 
-                            <img src={imgAppStore} alt='appStore' className='btn-appStore' />
+                        {/* <a href='#' target='_blank' rel="noreferrer"> */}
+                        <img src={imgAppStore} alt='appStore' className='btn-appStore' />
                         {/* </a>
                         <a href='#' target='_blank' rel="noreferrer"> */}
-                            <img src={imgPlayStore} alt='appStore' className='btn-appStore' />
+                        <img src={imgPlayStore} alt='appStore' className='btn-appStore' />
                         {/* </a> */}
                     </div>
                 </div>
@@ -49,25 +60,33 @@ export default function Acceuil() {
                     <h2 className='auth-title'>100%, right choice with voting system</h2>
                     <p className='auth-text'>Democracy is the answer</p>
                 </div>
-                    <ButtonContainer>
-                        <Link to='/signup' className="signup_link">
-                            Create an account
-                        </Link>
+                {!auth ?
+                    <ButtonContainer onClick={handleLogin}>
+                        {/* <Link to='/signup' className="signup_link"> */}
+                        Create an account
+                        {/* </Link> */}
                     </ButtonContainer>
+                    :
+                    <ButtonContainer onClick={handleLogout}>
+                        {/* <Link to='/signup' className="signup_link"> */}
+                        Logout
+                        {/* </Link> */}
+                    </ButtonContainer>
+                }
             </div>
             <div className='context-section'>
                 <div className="context-business">
-                    <img src={iconBusiness} alt='business' className='icon'/>
+                    <img src={iconBusiness} alt='business' className='icon' />
                     <h3 className='context-title'>business</h3>
                     <p className='description'>logo, CV picture, business card, etc...</p>
                 </div>
                 <div className="context-social">
-                    <img src={iconSocial} alt='business' className='icon'/>
+                    <img src={iconSocial} alt='business' className='icon' />
                     <h3 className='context-title'>social</h3>
                     <p className='description'>facebook, instagram, linkedIn, etc...</p>
                 </div>
                 <div className="context-dating">
-                    <img src={iconDating} alt='business' className='icon'/>
+                    <img src={iconDating} alt='business' className='icon' />
                     <h3 className='context-title'>dating</h3>
                     <p className='description'>tinder, snapshat,...</p>
                 </div>

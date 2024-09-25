@@ -46,4 +46,18 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 To learn React, check out the [React documentation](https://reactjs.org/).
 
 
-## Build and Deploy
+## Build and Push
+
+> sudo docker build -t picsrate-ui:latest .
+
+> sudo docker tag picsrate-ui:latest studio-registry:5000/picsrate-ui:latest
+
+> sudo docker push studio-registry:5000/picsrate-ui:latest
+
+## K3d deploy
+
+> sudo kubectl apply -f ./.github/dep.yaml
+
+> sudo kubectl apply -f ./.github/svc.yaml
+
+> sudo kubectl apply -f ./.github/ingress.yaml

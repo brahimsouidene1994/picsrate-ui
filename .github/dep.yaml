@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: picsrate-ui-dep
+  namespace: studio-qa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: picsrate-ui-dep
+  template:
+    metadata:
+      labels:
+        app: picsrate-ui-dep
+    spec:
+      containers:
+        - name: picsrate-ui-dep
+          image: studio-registry:5000/picsrate-ui:latest
+          ports:
+            - containerPort: 3000
