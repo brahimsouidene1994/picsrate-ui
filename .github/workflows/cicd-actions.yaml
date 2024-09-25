@@ -33,3 +33,5 @@ jobs:
           sudo docker build -t picsrate-ui:latest . 
           sudo docker tag picsrate-ui:latest studio-registry:5000/picsrate-ui:latest
           sudo docker push studio-registry:5000/picsrate-ui:latest
+      - name: Deploy to Kubernetes
+        run: sudo kubectl apply -f ./.github/dep.yaml
