@@ -8,6 +8,8 @@
     height: 80vh;
     width: 100%;
     padding: 10px 20px;
+}
+.section-one, .section-two{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -35,7 +37,7 @@
     border-radius: 10px;
 }
 
-.section-one .first .card .card-header h2{
+.section-one .first .card .card-header h2, .section-two .second .card .card-header {
     height: 100%;
     width: 100%;
     color: #fff;
@@ -49,10 +51,11 @@
     padding: 10px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 .section-one .first .card .card-body img{
     width: 100%;
-    height: 360px;
+    height: 350px;
     border-radius: 20px;
     box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.2);
 }
@@ -77,7 +80,7 @@
     align-items: center;
     justify-content: space-around;
 }
-.section-one .first .card .card-body .card-content .context h2{
+.section-one .first .card .card-body .card-content .context h2 {
     width: 100%;
     height: 100%;
     font-family: 'Alice';
@@ -103,6 +106,26 @@
     text-align: center;
     line-height: 3.5rem;
 }
+.section-one .first .card .card-footer {
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: self-start;
+    justify-content: start;
+}
+.section-one .first .card .card-footer div{
+    display: flex;
+    align-items: start;
+    margin-left: 20px;
+}
+
+.section-one .first .card .card-footer div h2{
+    font-size: 32px;
+    font-family: "Alice";
+    color: #0B192C;
+}
+
 .section-one .separator {
     height: 100%;
     border: 2px solid #fff;
@@ -119,7 +142,7 @@
 }
 
 .section-one .second .title{
-    width: 60%;
+    width: 70%;
     font-size: 64px;
     background: -webkit-linear-gradient(#1E3E62, #5F1479);
     -webkit-background-clip: text;
@@ -127,6 +150,7 @@
     font-family: 'Alice';
     margin-bottom: 30px;
     line-height: 1.2;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
 }
 .section-one .second .desc{
     width: 60%;
@@ -136,14 +160,93 @@
     margin-top: 30px;
 }
 .section-two{
-    /*background-image: url("../images/1.jpg");
-    background-size: contain; /* Scale the image while keeping its aspect ratio 
+    background-image: url("../images/2.jpg");
+    background-size: contain; /* Scale the image while keeping its aspect ratio */
     background-repeat: no-repeat;
-    background-position: center;
-    width: 100%; /* Set the width (or any specific width) 
-    height: auto; /* Auto height based on the width 
-    aspect-ratio: 16 / 9; /* Optional: Adjust the aspect ratio based on the image */
+    width: 100%; /* Set the width (or any specific width) */
+    height: auto; /* Auto height based on the width */
+    aspect-ratio: 16 / 7; /* Optional: Adjust the aspect ratio based on the image*/
+}
+.section-two .second{
+    display: flex !important;
+    flex-direction: row;
+}
+.section-two .second .card{
+    width: 350px !important;
+    height: 460px !important;
+    background-color: #D9D9D9;
+}
+.section-two .second .card .card-header{
+    background-color: #0B192C;
+    width: 100%;
+    height: 50px !important;
+}
+.section-two .second .card .card-body{
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+.section-two .second .card .card-body img{
+    width: 100%;
+    height: 350px;
+    box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.2);
+}
+.section-two .second .card .card-body .card-body-footer{
+    padding: 0;
+    width: 100%;
+    height: 60px;
+    position: relative;
+}
+.section-two .second .card .card-body .card-body-footer .context{
+    width: 100%;
+    height: 3.5rem;
+    font-size: 20px;
+    background-color: #fff;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 5px;
+}
+.section-two .second .card .card-body .card-body-footer .result{
+    border-radius: 5px;
+    width: 50%;
+    height: 3.5rem;
+    font-size: 20px;
+    background-color: #0B192C;
+    position: relative;
+}
+.section-two .second .card .card-body .card-body-footer .context h2 {
+    width: 100%;
+    height: 100%;
+    font-family: 'Alice';
+    font-size: 32px;
+    color: #FF6500;
+    line-height: 3.5rem;
+    text-align: center;
+}
 
+.section-two .second .card .card-body .card-body-footer .result h2{
+    width: 100%;
+    height: 100%;
+    font-family: 'Alice';
+    font-size: 28px;
+    color: #fff;
+    text-align: center;
+    line-height: 3.5rem;
+}
+.section-two .second .side-card{
+    width: 565px !important;
+    height: 460px !important;
+    background-color: #fff;
+    border-radius: 5px;
+}
+.graph-container{
+    /* height: 100%;
+    width: 100%; */
+    padding: 20px !important;
+    background-color: gray;
 }
 .section-three{
     /*background-image: url("../images/1.jpg");

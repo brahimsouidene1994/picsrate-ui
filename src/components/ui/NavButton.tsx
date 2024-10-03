@@ -1,7 +1,7 @@
 import Styled from 'styled-components';
 
 export const NavButton = Styled.text`
-  font-size: 32px;
+  font-size: 20px;
   cursor: pointer;
 
   color: #0B192C;
