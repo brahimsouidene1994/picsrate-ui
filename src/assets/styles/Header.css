@@ -1,0 +1,43 @@
+.header{
+    background: #fff;
+    max-width: 100vw;
+    height: 90px !important;
+    border-bottom: 2px solid #333; /* Border bottom color and thickness */
+    box-shadow: 0 4px 4px -2px rgba(0, 0, .5, 0); /* Shadow only at the bottom */
+}
+.header-content{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+.header-title{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-family: "Alice";
+    font-size: 64px;
+    color: #0B192C;
+    text-transform: capitalize;
+}
+.header-navigation{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.header-navigation-item{
+    padding: 12px;
+}
+.header-navigation-item-content{
+    font-family: "Alice";
+    font-size: 32px;
+    color: #0B192C;
+    text-transform: capitalize;
+    margin-left: 10;
+    margin-right: 10;
+}

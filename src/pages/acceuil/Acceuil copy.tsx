@@ -1,14 +1,14 @@
 import React from 'react';
-import '../assets/styles/Acceuil.css';
-import logo from '../assets/images/appstore.png';
-import imgAppStore from '../assets/images/appbtnstore.png';
-import imgPlayStore from '../assets/images/playstore.png';
-import iconBusiness from '../assets/images/growth-svgrepo-com.svg';
-import iconSocial from '../assets/images/link-svgrepo-com.svg';
-import iconDating from '../assets/images/gender-svgrepo-com.svg';
-import { ButtonContainer } from '../component/Button'
+import '../../assets/styles/Acceuil.css';
+import logo from '../../assets/images/appstore.png';
+import imgAppStore from '../../assets/images/appbtnstore.png';
+import imgPlayStore from '../../assets/images/playstore.png';
+import iconBusiness from '../../assets/images/growth-svgrepo-com.svg';
+import iconSocial from '../../assets/images/link-svgrepo-com.svg';
+import iconDating from '../../assets/images/gender-svgrepo-com.svg';
+import { ButtonContainer } from '../../components/ui/Button'
 import { Link } from 'react-router-dom';
-import keycloak from '../keycloak';
+import keycloak from '../../keycloak';
 import ReactPlayer from 'react-player';
 
 type PropsAuth = {
@@ -27,16 +27,22 @@ export default function Acceuil({ auth }: PropsAuth) {
     }
     return (
         <div className='page-acceuil'>
-            <div className='container'>
-                <img className='logo' src={logo} alt='logo' />
-                {/* <h1 className='title'>Pics rate</h1> */}
-                {/* <p className='description'>
-                    Pics Rate {' ( or pictures rating ) '} is a great app that helps you to choose the perfect picture.
-                    Usualy people get confused about which picture shoeld use in specific context.
-                    So, this application gives you the opportunity to let others choose for you by the voting system.
-                    You just need to upload the picture you want and choose the context for what you are go in to need it for,
-                    then peoples will vote and gives you notes for it.
-                </p> */}
+            <div className='context-section'>
+                <div className="context-business">
+                    <img src={iconBusiness} alt='business' className='icon' />
+                    <h3 className='context-title'>business</h3>
+                    <p className='description'>logo, CV picture, business card, etc...</p>
+                </div>
+                <div className="context-social">
+                    <img src={iconSocial} alt='business' className='icon' />
+                    <h3 className='context-title'>social</h3>
+                    <p className='description'>facebook, instagram, linkedIn, etc...</p>
+                </div>
+                <div className="context-dating">
+                    <img src={iconDating} alt='business' className='icon' />
+                    <h3 className='context-title'>dating</h3>
+                    <p className='description'>tinder, snapshat,...</p>
+                </div>
             </div>
             <div className='app-links'>
                 <div className='btns-section'>
@@ -74,23 +80,7 @@ export default function Acceuil({ auth }: PropsAuth) {
                     </ButtonContainer>
                 }
             </div>
-            <div className='context-section'>
-                <div className="context-business">
-                    <img src={iconBusiness} alt='business' className='icon' />
-                    <h3 className='context-title'>business</h3>
-                    <p className='description'>logo, CV picture, business card, etc...</p>
-                </div>
-                <div className="context-social">
-                    <img src={iconSocial} alt='business' className='icon' />
-                    <h3 className='context-title'>social</h3>
-                    <p className='description'>facebook, instagram, linkedIn, etc...</p>
-                </div>
-                <div className="context-dating">
-                    <img src={iconDating} alt='business' className='icon' />
-                    <h3 className='context-title'>dating</h3>
-                    <p className='description'>tinder, snapshat,...</p>
-                </div>
-            </div>
+            
             <div className='tuto_video' id="presentation_app">
                 <div className="info">
                     <h1 className='info-title'>Pics Rate Video;</h1>
