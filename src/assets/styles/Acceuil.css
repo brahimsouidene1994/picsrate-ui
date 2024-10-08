@@ -1,3 +1,14 @@
+.react-tabs__tab {
+    border: none;
+    padding: 10px 20px;
+    margin-bottom: -1px; /* Adjust to hide top border when active */
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.3s ease;
+  }
+  
+.react-tabs__tab--selected {
+    border: none;
+}
 .acceuil{
     width: 100vw;
     background-color: #fff;
@@ -26,8 +37,9 @@
 .section-one .first .card{
     width: 365px !important;
     height: 550px !important;
-    background-color: #D9D9D9;
+    background-color: transparent;
     border-radius: 10px;
+    box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 1);
 }
 
 .section-one .first .card .card-header{
@@ -41,13 +53,14 @@
     height: 100%;
     width: 100%;
     color: #fff;
-    font-family: "Alice";
+    font-family: Roboto,sans-serif;
     font-size: 32px;
     text-align: center;
     line-height: 2rem;
 }
 .section-one .first .card .card-body{
     width: 100%;
+    height: 350px;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -55,13 +68,14 @@
 }
 .section-one .first .card .card-body img{
     width: 100%;
-    height: 350px;
+    height: 85%;
     border-radius: 20px;
     box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.2);
 }
 
 .section-one .first .card .card-body .card-content{
     width: 100%;
+    height: 20%;
     position: relative;
     padding-top: 10px;
     display: flex;
@@ -73,7 +87,7 @@
     height: 3.5rem;
     font-size: 20px;
     background-color: #fff;
-    font-family: 'Alice';
+    font-family: Roboto,sans-serif;
     position: absolute;
     display: flex;
     flex-direction: row;
@@ -83,7 +97,7 @@
 .section-one .first .card .card-body .card-content .context h2 {
     width: 100%;
     height: 100%;
-    font-family: 'Alice';
+    font-family: Roboto,sans-serif;
     font-size: 28px;
     color: #FF6500;
     line-height: 3.5rem;
@@ -100,7 +114,7 @@
 .section-one .first .card .card-body .card-content .result h2{
     width: 100%;
     height: 100%;
-    font-family: 'Alice';
+    font-family: Roboto,sans-serif;
     font-size: 28px;
     color: #fff;
     text-align: center;
@@ -122,13 +136,17 @@
 
 .section-one .first .card .card-footer div h2{
     font-size: 32px;
-    font-family: "Alice";
+    font-family: Roboto,sans-serif;
     color: #0B192C;
 }
 
 .section-one .separator {
     height: 100%;
     border: 2px solid #fff;
+}
+.section-two .separator {
+    height: 100%;
+    border: 1px solid #a3a3a300;
 }
 .section-one .second {
     width: 100%;
@@ -144,10 +162,10 @@
 .section-one .second .title{
     width: 70%;
     font-size: 64px;
-    background: -webkit-linear-gradient(#1E3E62, #5F1479);
+    background: -webkit-linear-gradient(#2876cf, #d458ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-family: 'Alice';
+    font-family: Roboto,sans-serif;
     margin-bottom: 30px;
     line-height: 1.2;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
@@ -156,97 +174,125 @@
     width: 60%;
     font-size: 28px;
     color: #000;
-    font-family: 'Alice';
+    font-family: Roboto,sans-serif;
     margin-top: 30px;
 }
 .section-two{
+    height: 80vh;
+    width: 100vw;
     background-image: url("../images/2.jpg");
-    background-size: contain; /* Scale the image while keeping its aspect ratio */
+    background-size: cover; /* Scale the image while keeping its aspect ratio */
     background-repeat: no-repeat;
-    width: 100%; /* Set the width (or any specific width) */
-    height: auto; /* Auto height based on the width */
+    /* width: 100%; /* Set the width (or any specific width) 
+    height: auto; Auto height based on the width */
     aspect-ratio: 16 / 7; /* Optional: Adjust the aspect ratio based on the image*/
 }
+.section-two .first{
+    height: 100%;
+    display: flex;  
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.section-two .first h1{
+    margin-bottom: 32px;
+    font-family: Roboto,sans-serif;
+    font-size: 96px;
+    color: #FF6500;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+.section-two .first ul li{
+    font-family: Roboto,sans-serif;
+    font-size: 48px; 
+    color: #fff;
+}
 .section-two .second{
+    height:65%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: transparent;
     display: flex !important;
     flex-direction: row;
+    align-items: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 2) 
 }
 .section-two .second .card{
-    width: 350px !important;
-    height: 460px !important;
-    background-color: #D9D9D9;
+    width: 320px !important;
+    height: 100% !important;
+    background-color: #ffffff;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px;
+    border: none;
+    border-radius: 0px;
+}
+.dots {
+    position: absolute;
+    width: 500px;
+    height: 70%;
+    background: radial-gradient(powderblue 20px, transparent 0px);
+    background-repeat: repeat; /* or omit this declaration */
+    background-size: 50px 50px;
+    background-position: center;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
 }
 .section-two .second .card .card-header{
     background-color: #0B192C;
-    width: 100%;
-    height: 50px !important;
+    width: 90%;
+    height: 50px;
 }
 .section-two .second .card .card-body{
-    padding: 0;
-    display: flex;
-    flex-direction: column;
+    width: 300px;
+    height: 300px;
+    /* box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.2); */
 }
 .section-two .second .card .card-body img{
     width: 100%;
-    height: 350px;
-    box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.2);
+    height: 100%;
 }
-.section-two .second .card .card-body .card-body-footer{
+.section-two .second .card .card-footer{
     padding: 0;
-    width: 100%;
-    height: 60px;
-    position: relative;
+    width: 90%;
+    height: 100%;
+    background: transparent;
+    border: none;
 }
-.section-two .second .card .card-body .card-body-footer .context{
+.section-two .second .card .card-footer div{
     width: 100%;
-    height: 3.5rem;
-    font-size: 20px;
-    background-color: #fff;
-    position: absolute;
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    border-radius: 5px;
+    flex-direction: column;
+    margin: 0;
 }
-.section-two .second .card .card-body .card-body-footer .result{
-    border-radius: 5px;
-    width: 50%;
-    height: 3.5rem;
-    font-size: 20px;
-    background-color: #0B192C;
-    position: relative;
+.section-two .second .card .card-footer div h3{
+    font-family: Roboto,sans-serif;
+    font-size: 24px;
+    color: #5b5b5b;
 }
-.section-two .second .card .card-body .card-body-footer .context h2 {
-    width: 100%;
-    height: 100%;
-    font-family: 'Alice';
-    font-size: 32px;
-    color: #FF6500;
-    line-height: 3.5rem;
-    text-align: center;
-}
-
-.section-two .second .card .card-body .card-body-footer .result h2{
-    width: 100%;
-    height: 100%;
-    font-family: 'Alice';
+.section-two .second .card .card-footer div h2{
+    font-family: Roboto,sans-serif;
     font-size: 28px;
-    color: #fff;
-    text-align: center;
-    line-height: 3.5rem;
+    color: #0B192C;
+    font-weight: bold;
 }
 .section-two .second .side-card{
     width: 565px !important;
-    height: 460px !important;
+    height: 100%;
     background-color: #fff;
     border-radius: 5px;
+    box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.2);
+    border-radius: 0px;
 }
-.graph-container{
-    /* height: 100%;
-    width: 100%; */
-    padding: 20px !important;
-    background-color: gray;
+.vote-trait{
+    margin-bottom: -5px;
+    font-family: Roboto,sans-serif;
+    font-size: 32px;
+    text-transform: uppercase;
 }
 .section-three{
     /*background-image: url("../images/1.jpg");

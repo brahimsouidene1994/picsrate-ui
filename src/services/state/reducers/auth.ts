@@ -1,30 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { SPLASH } from '../actions'
+import { AUTH } from '../actions';
 
 // Define a type for the slice state
-interface SplashState {
+interface AuthState {
   value: boolean
 }
 
 // Define the initial state using that type
 const initialState = {
   value: false
-} as SplashState
+} as AuthState
 
-export const splashSlice = createSlice({
-  name: SPLASH,
+export const authSlice = createSlice({
+  name: AUTH,
   initialState,
   reducers: {
-    enableSplash: state => {
+    enableAuth: state => {
         state.value = true
     },
-    disableSplash: state => {
+    disableAuth: state => {
         state.value = false
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { enableSplash, disableSplash } = splashSlice.actions
+export const { enableAuth, disableAuth } = authSlice.actions
 
-export default splashSlice.reducer
+export default authSlice.reducer
