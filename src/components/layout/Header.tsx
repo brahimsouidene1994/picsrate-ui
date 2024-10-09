@@ -3,9 +3,9 @@ import '../../assets/styles/Header.css';
 import Button from 'react-bootstrap/Button';
 import { SignUpButton } from '../ui/Button';
 import { NavButton } from '../ui/NavButton';
-import Logo from '../../assets/images/logo-64.png';
+import Logo from '../../assets/images/logo-64-gradiant.png';
 import { useAppSelector } from '../../hooks/stateHooks';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useKeycloak } from "@react-keycloak/web";
 export default function Header() {
     const { keycloak } = useKeycloak();
@@ -15,7 +15,10 @@ export default function Header() {
         keycloak.login();
     }
     const handleLogout = () => {
-        keycloak.logout();
+        const redirectUri = window.location.origin;
+        keycloak.logout({
+            redirectUri
+        });
     }
     const handleRegister = () => {
         keycloak.register();
@@ -25,51 +28,39 @@ export default function Header() {
             <div className='header-content'>
                 <div className='header-logo'>
                     <img src={Logo} className='log-image' alt='logo-image' />
-                    <h1>PRate</h1>
+                    <h1>PicRate</h1>
                 </div>
                 <div className='header-navigation'>
-                    <div className='header-navigation-item'>
-                        <NavButton>
+                    <NavButton>
+                        <NavLink to='/app' className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}>
                             Application
-                        </NavButton>
-                    </div>
+                        </NavLink>
+                    </NavButton>
                     {
                         auth ?
                             <>
-                                <div className='header-navigation-item'>
-                                    <NavButton>
-                                        <Link to='/' >
-                                            Home
-                                        </Link>
-                                    </NavButton>
-                                </div>
-                                <div className='header-navigation-item'>
-                                    <NavButton>
-                                        <Link to='/new' >
-                                            New Test
-                                        </Link>
-                                    </NavButton>
-                                </div>
-                                <div className='header-navigation-item'>
-                                    <NavButton onClick={handleLogout}>
-                                        Logout
-                                    </NavButton>
-                                </div>
+                                <NavButton>
+                                    <NavLink to='/' className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}>
+                                        Home
+                                    </NavLink>
+                                </NavButton>
+                                <NavButton>
+                                    <NavLink to='/new' className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}>
+                                        New Test
+                                    </NavLink>
+                                </NavButton>
+                                <NavButton onClick={handleLogout}>
+                                    Logout
+                                </NavButton>
                             </>
                             :
                             <>
-                                <div className='header-navigation-item'>
-                                    {/* <Button variant="outline-primary">Sign Up</Button>{' '} */}
-                                    <NavButton onClick={handleLogin}>
-                                        Login
-                                    </NavButton>
-                                </div>
-                                <div className='header-navigation-item'>
-                                    {/* <Button variant="outline-primary">Sign Up</Button>{' '} */}
-                                    <SignUpButton onClick={handleRegister}>
-                                        SignUp
-                                    </SignUpButton>
-                                </div>
+                                <NavButton onClick={handleLogin}>
+                                    Login
+                                </NavButton>
+                                <SignUpButton onClick={handleRegister}>
+                                    SignUp
+                                </SignUpButton>
                             </>
                     }
                 </div>

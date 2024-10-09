@@ -21,18 +21,17 @@ export const  ButtonContainer = Styled.button`
 `; 
 
 export const SignUpButton = Styled.button`
-  background-color: #0B192C; /* Primary background color */
+  background: linear-gradient(to right, #2d68a4, #1e3f64); /* Primary background color */
   color: white;
   padding: 10px 25px;
   font-size: 20px;
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s ease; /* Smooth transition for hover effect */
-  border: 2px solid #000;
+  border: 1px solid #000;
   
   &:hover {
-    background-color: transparent;
+    background: none;
     color: #0B192C;
     border: 2px solid #0B192C; /* Turns into outlined on hover */
   }
