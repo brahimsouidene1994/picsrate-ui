@@ -33,6 +33,6 @@ export const SignUpButton = Styled.button`
   &:hover {
     background: none;
     color: #0B192C;
-    border: 2px solid #0B192C; /* Turns into outlined on hover */
+    border: 1px solid #0B192C; /* Turns into outlined on hover */
   }
 `;

@@ -3,7 +3,7 @@ import '../../assets/styles/Header.css';
 import Button from 'react-bootstrap/Button';
 import { SignUpButton } from '../ui/Button';
 import { NavButton } from '../ui/NavButton';
-import Logo from '../../assets/images/logo-64-gradiant.png';
+import Logo from '../../assets/images/logo-64-gradiant-scaled.png';
 import { useAppSelector } from '../../hooks/stateHooks';
 import { NavLink } from 'react-router-dom';
 import { useKeycloak } from "@react-keycloak/web";

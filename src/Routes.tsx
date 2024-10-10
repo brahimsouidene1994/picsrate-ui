@@ -7,7 +7,7 @@ import Footer from './components/layout/Footer';
 import Header from './components/layout/Header';
 import { useAppSelector, useAppDispatch } from './hooks/stateHooks';
 import { disableAuth, enableAuth } from './services/state/reducers/auth';
-import NewTest from './pages/new_test';
+import NewTest from './pages/new-test';
 import { useKeycloak } from "@react-keycloak/web";
 
 export default function Navigation() {
