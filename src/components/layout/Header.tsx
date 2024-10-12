@@ -49,6 +49,11 @@ export default function Header() {
                                         New Test
                                     </NavLink>
                                 </NavButton>
+                                <NavButton>
+                                    <NavLink to='/vote' className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}>
+                                        Vote
+                                    </NavLink>
+                                </NavButton>
                                 <NavButton onClick={handleLogout}>
                                     Logout
                                 </NavButton>

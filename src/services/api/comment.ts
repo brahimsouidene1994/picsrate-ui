@@ -23,13 +23,12 @@ const saveNewComment = async (commentData:CommentObject):Promise<void> => {
 const getAllCommentOfPicture= async (idPicture:string):Promise<CommentObject[]> => {
     let headers:AxiosRequestConfig['headers'] = await authHeader();
     let commentsOfCurrentPicture: CommentObject[]=[];
-    let url = `${process.env.REACT_APP_API_GET_ALL_COMMENT}`
-    console.log("register ", url)
+    let url = `${process.env.REACT_APP_API_GET_ALL_COMMENT}/${idPicture}`
+    console.log("register ->", url)
     try {
-        await axios.post(url,
+        await axios.get(url,
             {
-                headers: headers,
-                data: { idPicture: idPicture }
+                headers: headers
             },
         )
             .then(response => {

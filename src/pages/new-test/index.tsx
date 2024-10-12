@@ -12,34 +12,30 @@ import { CATEGORY } from '../../services/models/contants/Category';
 import { TRAIT } from '../../services/models/contants/Traits';
 import Trait from '../../components/ui/TraitCategory';
 import TraitCategory from '../../components/ui/TraitCategory';
-import { FormControlLabel, Switch, TextField } from '@mui/material';
+import { Alert, CircularProgress, FormControlLabel, Switch, TextField } from '@mui/material';
+import PictureService from '../../services/api/picture';
+import AlertTitle from '@mui/material/AlertTitle';
+import { useNavigate } from 'react-router-dom';
 
 const steps = ['Select picture', 'Set the title', 'Submitting'];
 
 export default function NewTest() {
+    const navigate = useNavigate();
     const [activeStep, setActiveStep] = React.useState(0);
-    const [skipped, setSkipped] = React.useState(new Set<number>());
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
     const [previewPicture, setPreviewPicture] = React.useState<string | null>(null);
     const [category, setCategory] = React.useState<string>('');
     const [title, setTitle] = React.useState('');
     const [commentStatus, setCommentStatus] = React.useState(true);
     const [nextTab, setNextTab] = React.useState(true);
-
-    const isStepSkipped = (step: number) => {
-        return skipped.has(step);
-    };
+    const [loading, setLoading] = React.useState(false);
+    const [response, setResponse] = React.useState(false);
+    const [responseMessage, setResponseMessage] = React.useState('');
 
     const handleNext = () => {
-        let newSkipped = skipped;
-        if (isStepSkipped(activeStep)) {
-            newSkipped = new Set(newSkipped.values());
-            newSkipped.delete(activeStep);
-        }
-
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
-        if (activeStep === steps.length - 1){
+        setNextTab(true);
+        if (activeStep === steps.length - 2) {
             setNextTab(false);
             submitNewPictureTest();
         }
@@ -58,21 +54,49 @@ export default function NewTest() {
         setTitle('');
         setCommentStatus(true)
         setNextTab(true);
+        navigate('/details')
     };
 
     const submitNewPictureTest = () => {
-        console.log('Saving new picture')
+        let formData = new FormData();
+
+        if (selectedFile) {
+            formData.append("photo", selectedFile, selectedFile.name);
+        } else {
+            console.error("No file selected");
+            return;
+        }
+
+        formData.append('category', category);
+        formData.append('context', title);
+        formData.append('commentsStatus', commentStatus.toString());
+        setLoading(true);
+
+        PictureService.saveNewPicture(formData)
+            .then((response) => {
+                setResponse(true)
+                setResponseMessage("New picture saved successfully")
+                setLoading(false)
+            })
+            .catch((error) => {
+                setResponse(false)
+                setResponseMessage(error.message)
+                setLoading(false)
+            }
+            )
     }
 
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = event.target.files?.[0] || null; // Get the first file if exists
+        console.log("handleFileChange", event.target.files?.[0])
         setSelectedFile(selectedFile);
 
         // Create a preview if a file is selected
         if (selectedFile) {
             const objectUrl = URL.createObjectURL(selectedFile);
+            console.log(objectUrl)
             setPreviewPicture(objectUrl);
             if (category) setNextTab(false)
         } else {
@@ -118,12 +142,19 @@ export default function NewTest() {
                 </Stepper>
                 {activeStep === steps.length ? (
                     <React.Fragment>
-                        <Typography sx={{ mt: 2, mb: 1 }}>
-                            All steps completed - you&apos;re finished
-                        </Typography>
+                        {!loading ?
+                            <Alert severity={response?'success':'error'} sx={{mt:2,mb:2}}>
+                                <AlertTitle>{response?'Success':'Error'}</AlertTitle>
+                                {responseMessage}
+                            </Alert>
+                            :
+                            <Box sx={{ mt: 2, mb: 2, textAlign: 'center' }}>
+                                <CircularProgress size="50px" />
+                            </Box>
+                        }
                         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                             <Box sx={{ flex: '1 1 auto' }} />
-                            <Button onClick={handleReset}>Reset</Button>
+                            <Button onClick={handleReset}>Continue</Button>
                         </Box>
                     </React.Fragment>
                 ) : (

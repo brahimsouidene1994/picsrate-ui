@@ -9,6 +9,8 @@ import { useAppSelector, useAppDispatch } from './hooks/stateHooks';
 import { disableAuth, enableAuth } from './services/state/reducers/auth';
 import NewTest from './pages/new-test';
 import { useKeycloak } from "@react-keycloak/web";
+import Details from './pages/details';
+import Vote from './pages/vote';
 
 export default function Navigation() {
     const { keycloak } = useKeycloak();
@@ -31,6 +33,8 @@ export default function Navigation() {
                         <Routes>
                             <Route path="/" element={<Home />} />
                             <Route path="/new" element={<NewTest />} />
+                            <Route path="/vote" element={<Vote />} />
+                            <Route path="/details/:id" element={<Details />} />
                             <Route path="*" element={<NotFound />} />
                         </Routes>
                         :

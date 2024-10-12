@@ -8,7 +8,7 @@ const getPicturesByCurrentUser = async ():Promise<PictureObject[]> => {
     let url = `${process.env.REACT_APP_API_GET_ALL_PICTURES_CURRENT_USER}`
     console.log("register ", url)
     try {
-        await axios.post(url,
+        await axios.get(url,
             {
                 headers: headers,
             },
