@@ -5,21 +5,18 @@ import AddIcon from '../../assets/images/add-image-m.png';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/stateHooks';
 import { setAlbum } from '../../services/state/reducers/album';
-import { Box, IconButton, ImageList, ImageListItem, ImageListItemBar, Typography } from '@mui/material';
+import { Box, ImageList, ImageListItem, ImageListItemBar, Typography } from '@mui/material';
 import { FaCircle } from "react-icons/fa6";
+
 export default function Home() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
   const album = useAppSelector(state => state.album.value)
     React.useEffect(()=>{
+      if(album.length === 0){
         getAlbum()
+      }
     },[])
-    const handleRedirect = () => {
-      navigate(`/new`); // Replace with the route you want to redirect to
-    };
-    const handleRedirectDetails = (id:string|undefined|null) => {
-      navigate(`/details/${id}`); // Replace with the route you want to redirect to
-    }
     const getAlbum = ():void => {
       PictureService.getPicturesByCurrentUser()
         .then((data) => {
@@ -48,7 +45,7 @@ export default function Home() {
                             borderColor: '#1976d2',
                           },
                   }}
-                  onClick={handleRedirect}
+                  onClick={()=>navigate('/new')}
                   >
                   <img src={`${AddIcon}`} style={{width:'80%',height:'auto'}}alt='add' />
                   <Typography style={{fontSize:18, textAlign:'center', fontFamily:'Roboto, sans-serif',color: '#0B192C', textTransform:'capitalize'}}>Add new test</Typography>
@@ -72,7 +69,7 @@ export default function Home() {
                     height: 'auto',  // Allow auto height to accommodate woven layout
                   }}
                   key={item.path}
-                  onClick={() => handleRedirectDetails(item._id)}
+                  onClick={() => navigate(`/details/${item._id}`)}
                 >
                   <img
                     style={{borderTopRightRadius: '10px',borderTopLeftRadius: '10px',height: '85%'}}
@@ -82,11 +79,17 @@ export default function Home() {
                     loading="lazy"
                   />
                   <ImageListItemBar
-                    sx={{borderTopLeftRadius:"10px",borderTopRightRadius:"10px", textAlign:'center', fontSize:'2rem', 
+                    sx={{borderTopLeftRadius:"10px",borderTopRightRadius:"10px", textAlign:'center',height:"2.5rem",
+                      '& .MuiImageListItemBar-titleWrap': {
+                        padding: 0,
+                        height: '100%',
+                      },
                         '& .MuiImageListItemBar-title': {
+                          height: '100%',
                           fontSize: '2rem', // Control the title font size
                           textTransform: 'capitalize',
                           fontFamily:'Roboto, sans-serif',
+                          lineHeight: '100%',
                         },
                     }}
                     title={item.contextPic}
@@ -116,7 +119,7 @@ export default function Home() {
                           sx={{
                             fontSize: '22px',
                             lineHeight: 2.5,
-                            width:'40%'
+                            width:'50%'
                           }}
                         >
                           {item.category}
@@ -128,16 +131,12 @@ export default function Home() {
                             width:'60%'
                           }}
                         >
-                          {item.voters?.length?`${item.voters?.length}v`:'no voters yet'}
+                          {`${item.voters?.length}V`}
+                        </Typography>
+                        <Typography sx={{marginRight:2}}>
+                          <FaCircle color={item.status?'green':'red'}/>
                         </Typography>
                       </div>
-                    }
-                    actionIcon={
-                      <IconButton
-                        aria-label={`info about ${item.contextPic}`}
-                      >
-                        <FaCircle color={item.status?'green':'red'}/>
-                      </IconButton>
                     }
                     position="below"
                   />

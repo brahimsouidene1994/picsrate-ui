@@ -1,6 +1,6 @@
 .body-new-test{
     width: 100vw;
-    height: 70vh;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;

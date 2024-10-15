@@ -6,44 +6,70 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import '../../assets/styles/NewTest.css'
-import Card from '@mui/material/Card';
-import Gallery from '../../assets/images/gallery.png';
 import { CATEGORY } from '../../services/models/contants/Category';
-import { TRAIT } from '../../services/models/contants/Traits';
-import Trait from '../../components/ui/TraitCategory';
 import TraitCategory from '../../components/ui/TraitCategory';
-import { Alert, CircularProgress, FormControlLabel, Switch, TextField } from '@mui/material';
+import { Alert, CircularProgress, Switch, TextField } from '@mui/material';
 import PictureService from '../../services/api/picture';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks/stateHooks';
+import { addOneToAlbum } from '../../services/state/reducers/album';
+import PictureObject from '../../services/models/picture';
 
 const steps = ['Select picture', 'Set the title', 'Submitting'];
 
+const label = { inputProps: { 'aria-label': 'Switch demo' } };
 export default function NewTest() {
     const navigate = useNavigate();
-    const [activeStep, setActiveStep] = React.useState(0);
+    const dispatch = useAppDispatch()
+
+    // response
+    const [loading, setLoading] = React.useState(false);
+    const [responseStatus, setResponseStatus] = React.useState(false);
+    const [responseMessage, setResponseMessage] = React.useState('');
+    const [newPicture, setNewPicture] = React.useState<PictureObject | null>(null);
+
+    // picture
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
     const [previewPicture, setPreviewPicture] = React.useState<string | null>(null);
     const [category, setCategory] = React.useState<string>('');
     const [title, setTitle] = React.useState('');
     const [commentStatus, setCommentStatus] = React.useState(true);
-    const [nextTab, setNextTab] = React.useState(true);
-    const [loading, setLoading] = React.useState(false);
-    const [response, setResponse] = React.useState(false);
-    const [responseMessage, setResponseMessage] = React.useState('');
 
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setNextTab(true);
-        if (activeStep === steps.length - 2) {
+    // tabs
+    const [nextTab, setNextTab] = React.useState(true);
+    const [activeStep, setActiveStep] = React.useState(0);
+    const [stepBacked, setStepBacked] = React.useState(false);
+
+    React.useEffect(() => {
+        if (activeStep === steps.length - 1) {
+            setNextTab(false);
+        }
+        else if (activeStep === steps.length) {
             setNextTab(false);
             submitNewPictureTest();
         }
+        else {
+            if (!stepBacked) {
+                setNextTab(true);
+                setStepBacked(false);
+            }
+        }
+    }, [activeStep]);
+
+    React.useEffect(() => {
+        if (newPicture) {
+            dispatch(addOneToAlbum(newPicture));
+        }
+    }, [newPicture])
+
+    const handleNext = () => {
+        setActiveStep((prevActiveStep: number) => prevActiveStep + 1);
     };
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
-        setNextTab(false);
+        setStepBacked(true)
     };
 
     const handleReset = () => {
@@ -54,7 +80,7 @@ export default function NewTest() {
         setTitle('');
         setCommentStatus(true)
         setNextTab(true);
-        navigate('/details')
+        navigate(`/details/${newPicture?._id}`)
     };
 
     const submitNewPictureTest = () => {
@@ -63,7 +89,6 @@ export default function NewTest() {
         if (selectedFile) {
             formData.append("photo", selectedFile, selectedFile.name);
         } else {
-            console.error("No file selected");
             return;
         }
 
@@ -73,24 +98,22 @@ export default function NewTest() {
         setLoading(true);
 
         PictureService.saveNewPicture(formData)
-            .then((response) => {
-                setResponse(true)
+            .then((response: PictureObject | null) => {
+                setNewPicture(response);
+                setResponseStatus(true)
                 setResponseMessage("New picture saved successfully")
                 setLoading(false)
             })
-            .catch((error) => {
-                setResponse(false)
+            .catch((error: Error) => {
+                setResponseStatus(false)
                 setResponseMessage(error.message)
                 setLoading(false)
             }
             )
     }
 
-    const label = { inputProps: { 'aria-label': 'Switch demo' } };
-
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFile = event.target.files?.[0] || null; // Get the first file if exists
-        console.log("handleFileChange", event.target.files?.[0])
+        const selectedFile = event.target.files?.[0] || null;
         setSelectedFile(selectedFile);
 
         // Create a preview if a file is selected
@@ -105,7 +128,6 @@ export default function NewTest() {
         }
     };
     const handleContext = (cat: string) => {
-        console.log('handleContext', cat)
         if (category === cat) {
             setCategory('');
             setNextTab(true);
@@ -125,7 +147,7 @@ export default function NewTest() {
     }
 
     return (
-        <div className='body-new-test'>
+        <Box sx={{ width: '100%',marginTop: 10, marginBottom: 10, display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
             <Box sx={{ width: '70%' }}>
                 <Stepper activeStep={activeStep}>
                     {steps.map((label, index) => {
@@ -143,8 +165,8 @@ export default function NewTest() {
                 {activeStep === steps.length ? (
                     <React.Fragment>
                         {!loading ?
-                            <Alert severity={response?'success':'error'} sx={{mt:2,mb:2}}>
-                                <AlertTitle>{response?'Success':'Error'}</AlertTitle>
+                            <Alert severity={responseStatus ? 'success' : 'error'} sx={{ mt: 2, mb: 2 }}>
+                                <AlertTitle>{responseStatus ? 'Success' : 'Error'}</AlertTitle>
                                 {responseMessage}
                             </Alert>
                             :
@@ -282,6 +304,6 @@ export default function NewTest() {
                     </React.Fragment>
                 )}
             </Box>
-        </div>
+        </Box>
     );
 }

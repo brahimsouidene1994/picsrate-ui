@@ -16,21 +16,25 @@ export const albumSlice = createSlice({
   initialState,
   reducers: {
     setAlbum: (state, action: PayloadAction<Array<PictureObject>>) => {
-        state.value= action.payload
+      state.value = action.payload
     },
     clearAlbum: state => {
-        state.value = []
+      state.value = []
     },
     deleteOneFromAlbum: (state, action: PayloadAction<String>) => {
       // state.value = action.payload
-      if(state.value.length > 0){
-        state.value = state.value.filter((pic:PictureObject) => String(pic._id) !== action.payload);
+      if (state.value.length > 0) {
+        state.value = state.value.filter((pic: PictureObject) => String(pic._id) !== action.payload);
+      }
+    },
+    addOneToAlbum: (state, action: PayloadAction<PictureObject>) => {
+      state.value.push(action.payload)
     }
-  },
   }
-})
+},
+)
 
 // Action creators are generated for each case reducer function
-export const { setAlbum, clearAlbum, deleteOneFromAlbum } = albumSlice.actions
+export const { setAlbum, clearAlbum, deleteOneFromAlbum, addOneToAlbum } = albumSlice.actions
 
 export default albumSlice.reducer

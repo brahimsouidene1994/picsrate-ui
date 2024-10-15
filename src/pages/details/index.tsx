@@ -1,15 +1,18 @@
-import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import PictureObject from "../../services/models/picture";
 import CommentObject from "../../services/models/comment";
 import PictureService from '../../services/api/picture';
 import CommentService from '../../services/api/comment';
+import DataTabs from "../../components/layout/DataTabs";
 import { FaCircle, FaPause, FaPlay } from "react-icons/fa";
-import { TbTrashOff, TbTrash } from "react-icons/tb";
+import { TbTrash } from "react-icons/tb";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch } from "../../hooks/stateHooks";
 import { deleteOneFromAlbum } from "../../services/state/reducers/album";
+import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { wait } from "../../utils/utilities";
+import AlertUi from "../../components/ui/AlertUi";
 
 export default function Details() {
     const { id } = useParams();
@@ -23,16 +26,18 @@ export default function Details() {
     const [votingResultMoy, setVotingResultMoy] = React.useState(0);
     const [reactionsTot, setReactionsTot] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
-    const [visible, setVisible] = React.useState(false);
+    
+    // update picture status
+    const [updateResponse, setUpdateResponse] = React.useState(false);
+    const [alertVisibility, setAlertVisibility] = React.useState(false);
+    const [alertMessage, setAlertMessage] = React.useState('');
+    
+    // delete picture
     const [showDialog, setShowDialog] = React.useState(false);
     const [deleteResponse, setDeleteResponse] = React.useState<boolean>(false);
-    const [deleteResponseStatus, setDeleteResponseStatus] = React.useState(false);
+    const [deleteResponseMessage, setDeleteResponseMessage] = React.useState('');
 
-    const onToggleSnackBar = () => setVisible(!visible);
-
-    const onDismissSnackBar = () => setVisible(false);
     React.useEffect(() => {
-        console.log('Details', id) // This will print the id of the selected picture
         if (!currentPicture && id) getCurrentPicture(id);
     }, [currentPicture]);
     const getCurrentPicture = (id: string) => {
@@ -108,8 +113,10 @@ export default function Details() {
         setLoading(true);
         PictureService.patchPictureStatus(currentPicture?._id!, !currentPicture?.status)
             .then(() => {
-                setVisible(true);
+                setAlertVisibility(true);
                 handleAlertVisibility();
+                setUpdateResponse(true);
+                setAlertMessage('Picture was successfully updated.');
                 setLoading(false);
                 setBtnState(false);
                 setCurrentPicture(prevCurrentPictureState => {
@@ -118,7 +125,14 @@ export default function Details() {
                     return updatedPicture;
                 });
             })
-            .catch((error) => console.error(error));
+            .catch((error:Error) => {
+                setAlertVisibility(true);
+                handleAlertVisibility();
+                setUpdateResponse(false);
+                setAlertMessage(error.message);
+                setLoading(false);
+                setBtnState(false);
+            });
     }
 
     const deletePicture = () => {
@@ -127,11 +141,12 @@ export default function Details() {
                 .then(() => {
                     setLoading(false);
                     setDeleteResponse(true);
-                    setDeleteResponseStatus(true);
+                    setDeleteResponseMessage('Deleted successfully');
+                    filterPictures(currentPicture?._id!.toString());
                 })
-                .catch((error) => {
+                .catch((error:Error) => {
                     setDeleteResponse(true);
-                    setDeleteResponseStatus(false);
+                    setDeleteResponseMessage(error.message);
                     setLoading(false);
                     console.log(error)
                 })
@@ -148,14 +163,8 @@ export default function Details() {
     const handleClose = () => {
         setShowDialog(false);
         setLoading(false);
-        if(deleteResponse)
+        if (deleteResponse)
             navigate('/')
-    };
-
-    const handleConfirm = () => {
-        // Add confirm logic here
-        console.log("Confirmed!");
-        deletePicture()
     };
 
     const formatDate = (chDate: string) => {
@@ -171,26 +180,23 @@ export default function Details() {
 
         return [year, month, day].join('-');
     }
-    const handleAlertVisibility = () =>{
-        wait(5000).then(() => setVisible(false));
-    }
-    const wait = (timeout:number) => {
-        return new Promise(resolve => setTimeout(resolve, timeout));
-    }
-    return (
-        <Box sx={{ height: 'auto', width: '100vw', marginTop: 10, marginBottom: 10, display: 'flex', justifyContent: 'center',alignItems:'center', flexDirection:'column' }}>
 
-            {visible &&
-                <Alert severity="success" onClose={() => { setVisible(false) }} sx={{position:'absolute', top:-80, width:'70%', height:'80px'}}>
-                    Picture was successfully updated.
-                </Alert>
+    const handleAlertVisibility = () => {
+        wait(5000).then(() => setAlertVisibility(false));
+    }
+
+    return (
+        <Box sx={{ height: 'auto', width: '100vw', marginTop: 10, marginBottom: 10, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+
+            {alertVisibility &&
+                <AlertUi updateResponse={updateResponse} message={alertMessage} handleVisibility={setAlertVisibility}/>
             }
             {currentPicture &&
-                <Box sx={{ backgroundColor: 'aliceblue', width: '70%', display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ width: '70%', display: 'flex', flexDirection: 'column' }}>
                     <Box sx={{ width: '100%', paddingLeft: 8, paddingRight: 8, paddingTop: 5 }}>
                         <Box sx={{
                             width: '100%', height: '90px', display: 'flex', padding: '10px', justifyContent: 'center',
-                            border: '2px solid transparent',  // Border for hover effect
+                            border: '2px solid transparent',
                             transition: 'box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out',
                             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                             borderRadius: '5px',
@@ -219,6 +225,7 @@ export default function Details() {
                                     loading={loading}
                                     disabled={currentPicture.status}
                                     onClick={handleDeleteDialog}
+                                    color="error"
                                 >
                                     Delete
                                 </LoadingButton>
@@ -241,13 +248,25 @@ export default function Details() {
                         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', paddingTop: 2, paddingBottom: 2 }}>
                             <Box sx={{ width: '45%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 5, paddingBottom: 5, paddingRight: 5 }}>
                                 <Box sx={{ height: '2.5rem', width: '100%', backgroundColor: '#0B192C' }}>
-                                    <Typography sx={{ fontSize: '1.7rem', color:'#fff', textAlign:'center'}}>{currentPicture.category}</Typography>
+                                    <Typography sx={{ fontSize: '1.7rem', color: '#fff', textAlign: 'center' }}>{currentPicture.category}</Typography>
                                 </Box>
-                                <img src={currentPicture.path} alt={'current-picture'} style={{ width: '100%', marginTop: '16px' }} />
+                                <img src={currentPicture.path} alt={'current-picture'} style={{ width: '100%', marginTop: '16px', marginBottom: '16px' }} />
+                                <Box sx={{ width: '100%', backgroundColor: 'transparent' }}>
+                                    <Typography sx={{ fontSize: '1.2rem', color: '#0b192cb8', textAlign: 'start' }}>Title</Typography>
+                                    <Typography sx={{ fontSize: '1.5rem', color: '#0B192C', textAlign: 'start', textTransform: 'capitalize' }}>{currentPicture.contextPic}</Typography>
+                                </Box>
                             </Box>
                             <Divider orientation="vertical" variant="middle" flexItem />
                             <Box sx={{ width: '90%', padding: 5 }}>
-
+                                {currentPicture.voters?.length ?
+                                <DataTabs noteCount={commentsCount}/>
+                                :
+                                <Box sx={{ height: '80%', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center',flexDirection:'column' }}>
+                                    <Typography sx={{fontFamily:'Roboto,sans-serif', fontSize:'2rem', textTransform:'capitalize'}}>No votes yet</Typography>
+                                    <Typography sx={{fontFamily:'Roboto,sans-serif', fontSize:'1.2rem', textTransform:'capitalize', textAlign:'center'}}>As soon as you get new vote, this section will be automatically displayed</Typography>
+                                    <Typography sx={{fontFamily:'Roboto,sans-serif', fontSize:'1rem', textTransform:'capitalize',textAlign:'center'}}><span style={{fontWeight:'bold'}}>Tip:</span> take and give tip, make sure to vote some users pictures, by doing that you will automatically increase the chances to make your pictures tests appear at the first swipes</Typography>
+                                </Box>
+                            }
                             </Box>
                         </Box>
                     </Box>
@@ -268,10 +287,10 @@ export default function Details() {
                             </Typography>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleClose} color="primary">
+                            <Button onClick={handleClose} color="primary" autoFocus={true} >
                                 Cancel
                             </Button>
-                            <Button onClick={handleConfirm} color="primary" autoFocus>
+                            <Button onClick={() => deletePicture()} color="primary" >
                                 Confirm
                             </Button>
                         </DialogActions>
@@ -281,7 +300,7 @@ export default function Details() {
                         <DialogTitle id="alert-dialog-title">{"Request Response"}</DialogTitle>
                         <DialogContent>
                             <Typography>
-                                {deleteResponseStatus ? "Deleted Successfuly!" : "Deleted Failurefuly!!"}
+                                {deleteResponseMessage}
                             </Typography>
                         </DialogContent>
                         <DialogActions>
@@ -295,3 +314,4 @@ export default function Details() {
         </Box>
     )
 }
+

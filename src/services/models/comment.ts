@@ -1,5 +1,4 @@
 export default interface CommentObject{
-    userId: string | null | undefined,
     pictureId: string | null | undefined,
     message: string | null | undefined,
     v1: number | null | undefined,
