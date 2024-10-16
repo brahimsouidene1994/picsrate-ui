@@ -3,7 +3,8 @@ frontend:
     image: "studio-registry:5000/picsrate-ui"
     tag: "latest"
     host: "picsrate-ui.bbs-studio.tn"
-    # backend_url: "http://falcone-api-svc"
+    backend_url: "http://picsrate-service"
+    keycloak_url: "keycloak.bbs-studio.tn"
     # dns:
     # - ip: "192.168.1.102"
     #   host: "keycloak.dev.alphalab.cloud"

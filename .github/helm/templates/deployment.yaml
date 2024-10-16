@@ -24,11 +24,13 @@ spec:
       - image: {{ $val.image }}:{{ $val.tag }}
         imagePullPolicy: Always
         name: {{ $key }}
-        # env:
-        # - name: "BACKEND_URI"
-        #   value: {{ $val.backend_url }}
-        # - name: "PROXY_ADDRESS_FORWARDING"
-        #   value: "true"
+        env:
+        - name: GENERATE_SOURCEMAP
+          value: "false"
+        - name: REACT_APP_API
+          value: {{ $val.backend_url }}
+        - name: REACT_APP_KEYCLOAK_API
+          value: {{ $val.keycloak_url }}
         ports:
           - name: http
             containerPort: 3000
