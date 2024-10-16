@@ -19,3 +19,10 @@ spec:
           tag: latest
           ports:
             - containerPort: 3000
+          env:
+            - name: GENERATE_SOURCEMAP
+              value: "false"
+            - name: REACT_APP_API
+              value: "http://picsrate-service"
+            - name: REACT_APP_KEYCLOAK_API
+              value: "keycloak.bbs-studio.tn"

@@ -5,7 +5,7 @@ import authHeader from "./auth-header";
 const getPicturesByCurrentUser = async ():Promise<PictureObject[]> => {
     let headers = await authHeader();
     let picturesOfCurrentUser: PictureObject[]=[];
-    let url = `${process.env.REACT_APP_API_GET_ALL_PICTURES_CURRENT_USER}`
+    let url = `${process.env.REACT_APP_API}/api/picture/getAllByUser`
     console.log("register ", url)
     try {
         await axios.get(url,
@@ -24,7 +24,7 @@ const getPicturesByCurrentUser = async ():Promise<PictureObject[]> => {
 }
 const patchPictureStatus = async (idPicture:string, status:boolean):Promise<void> => {
     let headers:AxiosRequestConfig['headers'] = await authHeader();
-    let url = `${process.env.REACT_APP_API_PATCH_PICTURE_STATUS}` + `${idPicture}`
+    let url = `${process.env.REACT_APP_API}/api/picture/updatestatus/${idPicture}`
     console.log("register ", url)
     try {
         await axios.patch(url,{ status: status },
@@ -43,7 +43,7 @@ const patchPictureStatus = async (idPicture:string, status:boolean):Promise<void
 const saveNewPicture = async (pictureData:FormData):Promise<PictureObject|null> => {
     let newPicture:PictureObject|null=null ;
     let headers:AxiosRequestConfig['headers'] = await authHeader("multipart/form-data");
-    let url = `${process.env.REACT_APP_API_SAVE_NEW_PICTURE}`
+    let url = `${process.env.REACT_APP_API}/api/picture/add`
     console.log("register ", url)
     try {
         await axios.post(url, pictureData,
@@ -65,7 +65,7 @@ const getOnePicture = async(id:string):Promise<PictureObject|null>=>{
     
     let picture: PictureObject|null = null;
     let headers:AxiosRequestConfig['headers'] = await authHeader();
-    let url=`${process.env.REACT_APP_API_GET_ONE_PICTURE}`+`${id}`
+    let url=`${process.env.REACT_APP_API}/api/picture/getOnePicture/${id}`
     console.log("register ", url)
     try{
         await axios.get(url,
@@ -86,7 +86,7 @@ const getOnePicture = async(id:string):Promise<PictureObject|null>=>{
 
 const deletePicture = async (id:string):Promise<void>=>{
     let headers:AxiosRequestConfig['headers'] = await authHeader();
-    let url = `${process.env.REACT_APP_API_DELETE_PICTURE}`+`${id}`
+    let url = `${process.env.REACT_APP_API}/api/picture/delete/${id}`
     console.log("register ", url)
     try{
         await axios.delete(url,
@@ -106,7 +106,7 @@ const getRandomPictureOfOthers = async ():Promise<PictureObject|null> => {
    
     let headers:AxiosRequestConfig['headers'] = await authHeader();
     let randomPicture:PictureObject|null = null;
-    let url=`${process.env.REACT_APP_API_GET_RANDOM_PICTURE}`
+    let url=`${process.env.REACT_APP_API}/api/picture/getOneRandomPicture`
     console.log("register ", url)
     try {
         await axios.get(url,

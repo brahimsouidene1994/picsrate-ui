@@ -4,6 +4,7 @@ import DataTabs from '../../components/layout/DataTabs';
 import { Card } from '../../components/ui/Card';
 import { FaRegHeart, FaRegCommentDots } from "react-icons/fa";
 import '../../assets/styles/Acceuil.css';
+import { CATEGORY } from '../../services/models/contants/Category';
 export default function Acceuil() {
     return (
         <div className='acceuil'>
@@ -18,7 +19,7 @@ export default function Acceuil() {
                             <img src={DatingImg} className='image' alt='card-image' />
                             <div className='card-content'>
                                 <div className='context'>
-                                    <h2></h2>
+                                    <h2>he</h2>
                                     <h2>Attractive</h2>
                                 </div>
                                 <div className='result'>
@@ -67,7 +68,7 @@ export default function Acceuil() {
                     </div>
                     <div className='separator'></div>
                     <div className='side-card'>
-                        <DataTabs noteCount={6}/>
+                        <DataTabs category={CATEGORY.BUSINESS} votes={[]}/>
                     </div>
                 </div>
             </div>

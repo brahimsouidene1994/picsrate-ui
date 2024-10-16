@@ -1,7 +1,7 @@
 import Keycloak from 'keycloak-js'
 
 const keycloakConfig = {
-  url: 'http://localhost:9080/',
+  url: `${process.env.REACT_APP_KEYCLOAK_API}`,
   realm: 'picsrate',
   clientId: 'web_app',
 }

@@ -21,7 +21,7 @@ export const  ButtonContainer = Styled.button`
 `; 
 
 export const SignUpButton = Styled.button`
-  background: linear-gradient(to right, #2d68a4, #1e3f64); /* Primary background color */
+  background: linear-gradient(to right, #2876cf, #d458ff); /* Primary background color */
   color: white;
   padding: 10px 25px;
   font-size: 20px;

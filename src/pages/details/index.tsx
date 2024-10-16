@@ -9,9 +9,9 @@ import { TbTrash } from "react-icons/tb";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch } from "../../hooks/stateHooks";
 import { deleteOneFromAlbum } from "../../services/state/reducers/album";
-import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { wait } from "../../utils/utilities";
+import { roundNumber, wait } from "../../utils/utilities";
 import AlertUi from "../../components/ui/AlertUi";
 
 export default function Details() {
@@ -20,11 +20,15 @@ export default function Details() {
     const dispatch = useAppDispatch()
     const [currentPicture, setCurrentPicture] = React.useState<PictureObject | null>(null);
     const [btnState, setBtnState] = React.useState(false);
-    const [comments, setComments] = React.useState<CommentObject[]>([]);
-    const [commentsCount, setCommentsCount] = React.useState(0);
+
+    // votes
+    const [votes, setVotes] = React.useState<CommentObject[]>([]);
+
+    // result 
     const [votingResultText, setVotingResultText] = React.useState('');
     const [votingResultMoy, setVotingResultMoy] = React.useState(0);
-    const [reactionsTot, setReactionsTot] = React.useState(0);
+
+    // loading
     const [loading, setLoading] = React.useState(false);
     
     // update picture status
@@ -50,12 +54,10 @@ export default function Details() {
                         .then((res) => {
                             if (res === null) return;
                             if (res) {
-                                setComments(res);
-                                setReactionsTot(res.length);
+                                setVotes(res);
                                 if (res.length === 0) {
                                     setVotingResultText('No voters yet')
                                 } else {
-                                    countComment(res);
                                     voteFormula(res);
                                 }
                             }
@@ -64,19 +66,6 @@ export default function Details() {
                 }
             })
             .catch((error) => console.error(error));
-    }
-    const countComment = (arrayComment: CommentObject[]) => {
-        if (arrayComment === null) return;
-        if (arrayComment.length === 0) setCommentsCount(0);
-        if (arrayComment.length > 0) {
-            let count = 0;
-            arrayComment.forEach(element => {
-                if (element.message !== null) {
-                    count++
-                }
-            });
-            setCommentsCount(count);
-        }
     }
 
     const voteFormula = (arrayVotes: CommentObject[]) => {
@@ -90,24 +79,24 @@ export default function Details() {
             let traitTwo = 0;
             let traitThree = 0;
             arrayVotes.forEach(element => {
-                if (element.v1)
-                    traitOne += element.v1;
-                if (element.v2)
-                    traitTwo += element.v2;
-                if (element.v3)
-                    traitThree += element.v3;
+                if (element.voteOne)
+                    traitOne += element.voteOne;
+                if (element.voteTwo)
+                    traitTwo += element.voteTwo;
+                if (element.voteThree)
+                    traitThree += element.voteThree;
             }
             );
-
             let result = (traitOne + traitTwo + traitThree) / arrayVotes.length;
             setVotingResultMoy(result);
-            if (result <= 10) setVotingResultText('Bad');
-            if ((10 < result) && (result < 15)) setVotingResultText('Somewhat');
-            if ((15 <= result) && (result < 20)) setVotingResultText('Medium');
-            if ((20 <= result) && (result < 25)) setVotingResultText('Good');
-            if ((25 <= result) && (result < 30)) setVotingResultText('Exellent');
+            if (result < 9) setVotingResultText('No');
+            if ((9 <= result) && (result < 15)) setVotingResultText('Bad');
+            if ((15 <= result) && (result < 21)) setVotingResultText('Average');
+            if ((21 <= result) && (result < 27)) setVotingResultText('Good');
+            if (27 <= result) setVotingResultText('Exellent');
         }
     }
+
     const handleStatus = () => {
         setBtnState(true);
         setLoading(true);
@@ -208,7 +197,12 @@ export default function Details() {
                             <Divider orientation="vertical" variant="middle" flexItem />
                             <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                                 <Typography sx={{ fontFamily: 'Roboto,sans-serif', fontSize: '1rem', color: '#878787' }}>Votes</Typography>
-                                <Typography sx={{ fontFamily: 'Roboto,sans-serif', fontSize: '1.4rem' }}>{currentPicture.voters?.length}</Typography>
+                                <Typography sx={{ fontFamily: 'Roboto,sans-serif', fontSize: '1.4rem' }}>{votes.length}</Typography>
+                            </Box>
+                            <Divider orientation="vertical" variant="middle" flexItem />
+                            <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                <Typography sx={{ fontFamily: 'Roboto,sans-serif', fontSize: '1rem', color: '#878787' }}>Moy</Typography>
+                                <Typography sx={{ fontFamily: 'Roboto,sans-serif', fontSize: '1.4rem' }}>{roundNumber(votingResultMoy)}/30</Typography>
                             </Box>
                             <Divider orientation="vertical" variant="middle" flexItem />
                             <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -251,15 +245,21 @@ export default function Details() {
                                     <Typography sx={{ fontSize: '1.7rem', color: '#fff', textAlign: 'center' }}>{currentPicture.category}</Typography>
                                 </Box>
                                 <img src={currentPicture.path} alt={'current-picture'} style={{ width: '100%', marginTop: '16px', marginBottom: '16px' }} />
-                                <Box sx={{ width: '100%', backgroundColor: 'transparent' }}>
-                                    <Typography sx={{ fontSize: '1.2rem', color: '#0b192cb8', textAlign: 'start' }}>Title</Typography>
-                                    <Typography sx={{ fontSize: '1.5rem', color: '#0B192C', textAlign: 'start', textTransform: 'capitalize' }}>{currentPicture.contextPic}</Typography>
+                                <Box sx={{ width: '100%', backgroundColor: 'transparent', display:'flex', flexDirection:'row' }}>
+                                    <Box sx={{ width: '100%'}}>
+                                        <Typography sx={{ fontSize: '1.2rem', color: '#0b192cb8', textAlign: 'start' }}>Title</Typography>
+                                        <Typography sx={{ fontSize: '1.5rem', color: '#0B192C', textAlign: 'start', textTransform: 'capitalize' }}>{currentPicture.contextPic}</Typography>
+                                    </Box>                                    
+                                    <Box sx={{ width: '100%'}}>
+                                        <Typography sx={{ fontSize: '1.2rem', color: '#0b192cb8', textAlign: 'start' }}>Created At</Typography>
+                                        <Typography sx={{ fontSize: '1.5rem', color: '#0B192C', textAlign: 'start', textTransform: 'capitalize' }}>{formatDate(currentPicture.createdAt)}</Typography>
+                                    </Box>
                                 </Box>
                             </Box>
                             <Divider orientation="vertical" variant="middle" flexItem />
                             <Box sx={{ width: '90%', padding: 5 }}>
                                 {currentPicture.voters?.length ?
-                                <DataTabs noteCount={commentsCount}/>
+                                <DataTabs category={currentPicture.category} votes={votes}/>
                                 :
                                 <Box sx={{ height: '80%', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center',flexDirection:'column' }}>
                                     <Typography sx={{fontFamily:'Roboto,sans-serif', fontSize:'2rem', textTransform:'capitalize'}}>No votes yet</Typography>

@@ -1,9 +1,9 @@
 import React from 'react';
-import '../../assets/styles/Footer.css';
+import { Box } from '@mui/material';
 export default function Footer() {
     return (
-        <div className='footer'>
-            <p className='text-copy'>copyright {'(C)'} bbs-studio.tn</p>
-        </div>
+        <Box sx={{background: 'linear-gradient(to bottom, #272428, #5C4F60 )', height:'40vh', width:'100%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+            <p>copyright {'(C)'} bbs-studio.tn</p>
+        </Box>
     )
 }
