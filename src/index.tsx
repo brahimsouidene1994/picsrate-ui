@@ -18,10 +18,17 @@ const onTokens = (tokens:any) => {
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const keycloakInitOptions = {
+  onLoad: 'check-sso',  // You can also try 'login-required' if you want to force login
+  checkLoginIframe: false,  // Disable iframe check to avoid the timeout error
+  silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',  // This file should exist if used
+};
+
 root.render(
   <ReactKeycloakProvider 
   authClient={keycloak} 
-  initOptions={{ onLoad: 'check-sso' }}
+  initOptions={keycloakInitOptions}
   onEvent={onKeycloakEvent}
   onTokens={onTokens}
   >
