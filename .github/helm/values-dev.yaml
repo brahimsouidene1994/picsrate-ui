@@ -4,7 +4,7 @@ frontend:
     tag: "latest"
     host: "picsrate-ui.bbs-studio.tn"
     backend_url: "http://picsrate-service"
-    keycloak_url: "http://auth.qa.picsrate.bbs-studio.tn"
+    keycloak_url: "https://auth.qa.picsrate.bbs-studio.tn"
     # dns:
     # - ip: "192.168.1.102"
     #   host: "keycloak.dev.alphalab.cloud"

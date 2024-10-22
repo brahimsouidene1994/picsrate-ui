@@ -15,8 +15,7 @@ spec:
     spec:
       containers:
         - name: picsrate-ui-dep
-          image: studio-registry:5000/picsrate-ui
-          tag: latest
+          image: studio-registry:5000/picsrate-ui:latest
           ports:
             - containerPort: 3000
           env:
@@ -25,4 +24,4 @@ spec:
             - name: REACT_APP_API
               value: "http://picsrate-service"
             - name: REACT_APP_KEYCLOAK_API
-              value: "keycloak.bbs-studio.tn"
+              value: "https://auth.qa.picsrate.bbs-studio.tn"

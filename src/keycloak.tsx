@@ -1,7 +1,7 @@
-import Keycloak from 'keycloak-js'
+import Keycloak, { KeycloakConfig } from 'keycloak-js'
 
-const keycloakConfig = {
-  url: `http://auth.qa.picsrate.bbs-studio.tn`,
+const keycloakConfig:KeycloakConfig = {
+  url: `https://auth.qa.picsrate.bbs-studio.tn`,
   realm: 'picsrate',
   clientId: 'web_app',
 }
