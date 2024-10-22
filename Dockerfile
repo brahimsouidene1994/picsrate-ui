@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Cache and Install dependencies
 COPY package.json .
-COPY yarn.lock .
+COPY package-lock.json .
 RUN npm i
 
 # Copy app files
