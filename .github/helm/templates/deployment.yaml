@@ -31,6 +31,10 @@ spec:
           value: {{ $val.backend_url }}
         - name: REACT_APP_KEYCLOAK_API
           value: {{ $val.keycloak_url }}
+        - name: REACT_APP_KEYCLOAK_REALM
+          value: {{ $val.keycloak_realm }}
+        - name: REACT_APP_KEYCLOAK_CLIENT
+          value: {{ $val.keycloak_client }}
         ports:
           - name: http
             containerPort: 3000
