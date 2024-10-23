@@ -1,33 +1,16 @@
-FROM node:14-alpine AS builder
-ENV NODE_ENV production
-
-# Add a work directory
+FROM node:16.17-slim AS build
 WORKDIR /app
+COPY package.json package-lock.json /app/
+RUN npm install
+COPY . /app/
+RUN npm run build && rm -rf node_modules/
 
-# Cache and Install dependencies
-COPY package.json .
-COPY package-lock.json .
-RUN npm i
-
-# Copy app files
-COPY . .
-
-# Build the app
-RUN npm run build
-
-# Bundle static assets with nginx
-FROM nginx:1.21.0-alpine as production
-ENV NODE_ENV production
-
-# Copy built assets from builder
-COPY --from=builder /app/build /usr/share/nginx/html
-
-# Add your nginx.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
-
+FROM nginx:1.23-alpine-slim as runtime
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=build /app/publish/entrypoint.sh /entrypoint.sh
+COPY --from=build /app/publish/nginx.site.template /etc/nginx/conf.d/
+COPY --from=build /app/build/resources/main/static /usr/share/nginx/html
+RUN chmod 444 /usr/share/nginx/html/favicon.ico
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["sh"]

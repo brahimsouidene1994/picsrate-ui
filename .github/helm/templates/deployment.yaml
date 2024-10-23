@@ -37,6 +37,6 @@ spec:
           value: {{ $val.keycloak_client }}
         ports:
           - name: http
-            containerPort: 3000
+            containerPort: {{ $val.target_port }}
             protocol: TCP
 {{- end }}

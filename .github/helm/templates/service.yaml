@@ -6,8 +6,8 @@ metadata:
   name: {{ $key }}-svc
 spec:
   ports:
-  - port: 80
-    targetPort: 3000
+  - port: {{ $val.port }}
+    targetPort: {{ $val.target_port }}
     protocol: TCP
     name: http
   selector:
@@ -17,27 +17,30 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: picsrate-ui
-  namespace: studio-qa
+  name: {{ $key }}-ing
+  {{- with $val.ingress.annotations }}
   annotations:
-    ingress.kubernetes.io/ssl-redirect: "true"
-    kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/rule-type: PathPrefix
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    {{- range $ing_key, $ing_value := . }}
+    {{ $ing_key }}: {{ tpl $ing_value $ | quote }}
+    {{- end }}
+  {{- end }}
 spec:
-  tls:
-    - hosts:
-      - {{ $val.host }}
-      secretName: {{ $val.host }}-tls
+  ingressClassName: {{ $val.ingress.ingressClassName }}
   rules:
-    - host: {{ $val.host }}
+    - host: {{ $val.ingress.host }}
       http:
         paths:
-          - pathType: Prefix
-            backend:
-              service:
-                name: {{ $key }}-svc
-                port:
-                  number: 80
-            path: /
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: {{ $key }}-svc
+              port:
+                name: http
+  tls:
+  - hosts:
+    - {{ $val.ingress.host }}
+    secretName: {{ $val.ingress.host }}-tls
+  {{ end }}
 {{ end }}
+
