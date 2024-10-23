@@ -42,4 +42,3 @@ spec:
     - {{ $val.ingress.host }}
     secretName: {{ $val.ingress.host }}-tls
 {{ end }}
-
