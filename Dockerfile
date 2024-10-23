@@ -1,17 +1,29 @@
-FROM node:16.17-slim AS build
+# Stage 1: Build the React app
+FROM node:18-alpine AS build
+
+# Set working directory
 WORKDIR /app
-COPY package.json package-lock.json /app/
+
+# Copy package.json and package-lock.json to install dependencies
+COPY package*.json ./
+
+# Install dependencies
 RUN npm install
-COPY . /app/
-RUN npm run build && rm -rf node_modules/
 
-FROM nginx:1.23-alpine-slim as runtime
-RUN rm -rf /usr/share/nginx/html/*
-COPY --from=build /app/publish/entrypoint.sh /entrypoint.sh
-COPY --from=build /app/publish/nginx.site.template /etc/nginx/conf.d/
+# Copy the entire project
+COPY . .
+
+# Build the React app in production mode
+RUN npm run build
+
+# Stage 2: Serve the React app with a lightweight web server
+FROM nginx:alpine
+
+# Copy the build files from the previous stage to the Nginx html folder
 COPY --from=build /app/build /usr/share/nginx/html
-RUN chmod 444 /usr/share/nginx/html/favicon.ico
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["sh"]
 
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx server
+CMD ["nginx", "-g", "daemon off;"]
