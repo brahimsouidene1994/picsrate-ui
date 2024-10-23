@@ -7,8 +7,7 @@ ENV NODE_ENV production
 WORKDIR /app
 
 # Cache and Install dependencies
-COPY package.json .
-COPY yarn.lock .
+COPY package*.json .
 RUN npm i
 
 # Copy app files
