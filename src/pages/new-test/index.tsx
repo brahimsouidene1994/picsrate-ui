@@ -15,11 +15,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/stateHooks';
 import { addOneToAlbum } from '../../services/state/reducers/album';
 import PictureObject from '../../services/models/picture';
+import { useAuth } from "react-oidc-context";
 
 const steps = ['Select picture', 'Set the title', 'Submitting'];
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 export default function NewTest() {
+    const oidc = useAuth();
     const navigate = useNavigate();
     const dispatch = useAppDispatch()
 
@@ -84,6 +86,7 @@ export default function NewTest() {
     };
 
     const submitNewPictureTest = () => {
+        const token = oidc.user?.access_token;
         let formData = new FormData();
 
         if (selectedFile) {
@@ -97,7 +100,7 @@ export default function NewTest() {
         formData.append('commentsStatus', commentStatus.toString());
         setLoading(true);
 
-        PictureService.saveNewPicture(formData)
+        PictureService.saveNewPicture(formData, token!.toString())
             .then((response: PictureObject | null) => {
                 setNewPicture(response);
                 setResponseStatus(true)

@@ -7,8 +7,9 @@ import { useAppDispatch, useAppSelector } from '../../hooks/stateHooks';
 import { setAlbum } from '../../services/state/reducers/album';
 import { Box, ImageList, ImageListItem, ImageListItemBar, Typography } from '@mui/material';
 import { FaCircle } from "react-icons/fa6";
-
+import { useAuth } from "react-oidc-context";
 export default function Home() {
+  const oidc = useAuth();
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
   const album = useAppSelector(state => state.album.value)
@@ -18,7 +19,10 @@ export default function Home() {
       }
     },[])
     const getAlbum = ():void => {
-      PictureService.getPicturesByCurrentUser()
+
+      const token = oidc.user?.access_token;
+      console.log("token: " + token)
+      PictureService.getPicturesByCurrentUser(token!.toString())
         .then((data) => {
             if (data === null) return ;
             if (data.length > 0) {

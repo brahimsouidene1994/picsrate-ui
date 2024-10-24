@@ -1,28 +1,23 @@
-import React from 'react';
 import '../../assets/styles/Header.css';
-import Button from 'react-bootstrap/Button';
 import { SignUpButton } from '../ui/Button';
 import { NavButton } from '../ui/NavButton';
 import Logo from '../../assets/images/logo-64-gradiant-scaled.png';
 import { useAppSelector } from '../../hooks/stateHooks';
 import { NavLink } from 'react-router-dom';
-import { useKeycloak } from "@react-keycloak/web";
+import { useAuth } from "react-oidc-context";
 export default function Header() {
-    const { keycloak } = useKeycloak();
+    const oidc = useAuth();
     const auth = useAppSelector(state => state.auth.value)
 
     const handleLogin = () => {
-        keycloak.login();
+        oidc.signinRedirect();
     }
     const handleLogout = () => {
-        const redirectUri = window.location.origin;
-        keycloak.logout({
-            redirectUri
-        });
+        oidc.signoutRedirect();
     }
     const handleRegister = () => {
-        keycloak.register();
-    }
+        oidc.signinRedirect();
+      };
     return (
         <div className='header'>
             <div className='header-content'>

@@ -8,18 +8,18 @@ import Header from './components/layout/Header';
 import { useAppSelector, useAppDispatch } from './hooks/stateHooks';
 import { disableAuth, enableAuth } from './services/state/reducers/auth';
 import NewTest from './pages/new-test';
-import { useKeycloak } from "@react-keycloak/web";
 import Details from './pages/details';
 import Vote from './pages/vote';
-
+import { useAuth } from "react-oidc-context";
 export default function Navigation() {
-    const { keycloak } = useKeycloak();
+    const oidc = useAuth();
     const auth = useAppSelector((state) => state.auth.value);
     const dispatch = useAppDispatch()
     React.useEffect(() => { checkAuth() });
 
     const checkAuth = async (): Promise<void> => {
-        if (keycloak.authenticated)
+        console.log("Checking...", process.env.REACT_APP_KEYCLOAK_API)
+        if (oidc.isAuthenticated)
             dispatch(enableAuth())
         else dispatch(disableAuth());
     };

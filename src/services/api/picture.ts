@@ -1,16 +1,16 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 import PictureObject from "../models/picture";
-import authHeader from "./auth-header";
 
-const getPicturesByCurrentUser = async ():Promise<PictureObject[]> => {
-    let headers = await authHeader();
+const getPicturesByCurrentUser = async (token:string):Promise<PictureObject[]> => {
     let picturesOfCurrentUser: PictureObject[]=[];
     let url = `${process.env.REACT_APP_API}/api/picture/getAllByUser`
     console.log("register ", url)
     try {
         await axios.get(url,
             {
-                headers: headers,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
             },
         )
             .then(response => {
@@ -22,14 +22,15 @@ const getPicturesByCurrentUser = async ():Promise<PictureObject[]> => {
     };
     return picturesOfCurrentUser;
 }
-const patchPictureStatus = async (idPicture:string, status:boolean):Promise<void> => {
-    let headers:AxiosRequestConfig['headers'] = await authHeader();
+const patchPictureStatus = async (idPicture:string, status:boolean,token:string):Promise<void> => {
     let url = `${process.env.REACT_APP_API}/api/picture/updatestatus/${idPicture}`
     console.log("register ", url)
     try {
         await axios.patch(url,{ status: status },
             {
-                headers : headers
+                headers : {
+                    Authorization: `Bearer ${token}`
+                }
             },
         )
             .then(response => {
@@ -40,15 +41,16 @@ const patchPictureStatus = async (idPicture:string, status:boolean):Promise<void
     };
 }
 
-const saveNewPicture = async (pictureData:FormData):Promise<PictureObject|null> => {
+const saveNewPicture = async (pictureData:FormData,token:string):Promise<PictureObject|null> => {
     let newPicture:PictureObject|null=null ;
-    let headers:AxiosRequestConfig['headers'] = await authHeader("multipart/form-data");
     let url = `${process.env.REACT_APP_API}/api/picture/add`
     console.log("register ", url)
     try {
         await axios.post(url, pictureData,
             {
-                headers: headers
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             },
         )
         .then(response => {
@@ -61,16 +63,16 @@ const saveNewPicture = async (pictureData:FormData):Promise<PictureObject|null> 
     return newPicture
 }
 
-const getOnePicture = async(id:string):Promise<PictureObject|null>=>{
-    
+const getOnePicture = async(id:string,token:string):Promise<PictureObject|null>=>{
     let picture: PictureObject|null = null;
-    let headers:AxiosRequestConfig['headers'] = await authHeader();
     let url=`${process.env.REACT_APP_API}/api/picture/getOnePicture/${id}`
     console.log("register ", url)
     try{
         await axios.get(url,
         {
-            headers : headers
+            headers : {
+                Authorization: `Bearer ${token}`
+            }
         },
         )
         .then(response =>{
@@ -84,14 +86,15 @@ const getOnePicture = async(id:string):Promise<PictureObject|null>=>{
     return picture;
 }
 
-const deletePicture = async (id:string):Promise<void>=>{
-    let headers:AxiosRequestConfig['headers'] = await authHeader();
+const deletePicture = async (id:string,token:string):Promise<void>=>{
     let url = `${process.env.REACT_APP_API}/api/picture/delete/${id}`
     console.log("register ", url)
     try{
         await axios.delete(url,
         {
-            headers : headers
+            headers : {
+                Authorization: `Bearer ${token}`
+            }
         },
         )
         .then(response=>{
@@ -102,16 +105,16 @@ const deletePicture = async (id:string):Promise<void>=>{
     }
 }
 
-const getRandomPictureOfOthers = async ():Promise<PictureObject|null> => {
-   
-    let headers:AxiosRequestConfig['headers'] = await authHeader();
+const getRandomPictureOfOthers = async (token:string):Promise<PictureObject|null> => {
     let randomPicture:PictureObject|null = null;
     let url=`${process.env.REACT_APP_API}/api/picture/getOneRandomPicture`
     console.log("register ", url)
     try {
         await axios.get(url,
             {
-                headers: headers
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             },
         )
             .then(response => {
@@ -123,15 +126,15 @@ const getRandomPictureOfOthers = async ():Promise<PictureObject|null> => {
     return randomPicture;
 }
 
-const test = async ():Promise<void> => {
-   
-    let headers:AxiosRequestConfig['headers'] = await authHeader();
+const test = async (token:string):Promise<void> => {
     let url=`${process.env.REACT_APP_API_GET_TEST}`
     console.log("test url ", url)
     try {
         await axios.get(url,
             {
-                headers: headers,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
             },
         )
             .then(response => {

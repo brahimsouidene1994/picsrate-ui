@@ -9,8 +9,10 @@ import { HiRefresh } from "react-icons/hi";
 import { LoadingButton } from "@mui/lab";
 import CommentObject from "../../services/models/comment";
 import CommentService from "../../services/api/comment";
+import { useAuth } from "react-oidc-context";
 
 export default function Vote() {
+    const oidc = useAuth();
     const [randomPicture, setRandomPicture] = React.useState<PictureObject | null>(null);
     const [note, setNote] = React.useState<string | null>('');
     const [voteOne, setVoteOne] = React.useState<number>(0);
@@ -21,9 +23,10 @@ export default function Vote() {
         pickPictureRandomly();
     }, []);
     const pickPictureRandomly = () => {
+        const token = oidc.user?.access_token;
         setRandomPicture(null)
         setLoading(true);
-        PictureService.getRandomPictureOfOthers()
+        PictureService.getRandomPictureOfOthers(token!.toString())
             .then((response) => {
                 if (response === null) return;
                 if (response) {
@@ -36,6 +39,7 @@ export default function Vote() {
 
     const handleSubmit = () => {
         setLoading(true);
+        const token = oidc.user?.access_token;
         if (note === '') { setNote(null) }
         let comment: CommentObject = {
             pictureId: randomPicture?._id,
@@ -44,7 +48,7 @@ export default function Vote() {
             voteTwo: voteTow,
             voteThree: voteThree
         };
-        CommentService.saveNewComment(comment)
+        CommentService.saveNewComment(comment, token!.toString())
             .then(() => {
                 setLoading(false);
                 setNote('')

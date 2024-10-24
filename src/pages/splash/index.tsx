@@ -1,11 +1,8 @@
 import React from 'react';
-import PictureService from '../../services/api/picture';
 import '../../assets/styles/Splash.css'
 import Logo from '../../assets/images/logo-128-gradiant.png';
 import LinearProgress from '@mui/material/LinearProgress';
 export default function Splash() {
-    React.useEffect(()=>{
-    },[])
     return (
         <div className='body-splash'>
             <div>

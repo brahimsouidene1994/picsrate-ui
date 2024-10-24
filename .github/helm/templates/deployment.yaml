@@ -14,12 +14,6 @@ spec:
       labels:
         app: {{ $key }}-dep
     spec:
-      # hostAliases:
-      # {{- range  $el := $val.dns }}
-      # - ip: {{ $el.ip }}
-      #   hostnames:
-      #   - {{ $el.host }}
-      # {{- end }}    
       containers:
       - image: {{ $val.image }}:{{ $val.tag }}
         imagePullPolicy: Always
@@ -37,6 +31,6 @@ spec:
           value: {{ $val.keycloak_client }}
         ports:
           - name: http
-            containerPort: {{ $val.target_port }}
+            containerPort: {{ $val.port }}
             protocol: TCP
 {{- end }}

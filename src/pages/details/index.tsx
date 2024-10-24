@@ -13,8 +13,9 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider
 import { useNavigate, useParams } from "react-router-dom";
 import { roundNumber, wait } from "../../utils/utilities";
 import AlertUi from "../../components/ui/AlertUi";
-
+import { useAuth } from "react-oidc-context";
 export default function Details() {
+    const oidc = useAuth();
     const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useAppDispatch()
@@ -45,12 +46,13 @@ export default function Details() {
         if (!currentPicture && id) getCurrentPicture(id);
     }, [currentPicture]);
     const getCurrentPicture = (id: string) => {
-        PictureService.getOnePicture(id)
+        const token = oidc.user?.access_token;
+        PictureService.getOnePicture(id,token!.toString())
             .then(response => {
                 if (response === null) return;
                 if (response) {
                     setCurrentPicture(response);
-                    CommentService.getAllCommentOfPicture(id)
+                    CommentService.getAllCommentOfPicture(id,token!.toString())
                         .then((res) => {
                             if (res === null) return;
                             if (res) {
@@ -98,9 +100,11 @@ export default function Details() {
     }
 
     const handleStatus = () => {
+
+        const token = oidc.user?.access_token;
         setBtnState(true);
         setLoading(true);
-        PictureService.patchPictureStatus(currentPicture?._id!, !currentPicture?.status)
+        PictureService.patchPictureStatus(currentPicture?._id!, !currentPicture?.status, token!.toString())
             .then(() => {
                 setAlertVisibility(true);
                 handleAlertVisibility();
@@ -125,8 +129,10 @@ export default function Details() {
     }
 
     const deletePicture = () => {
+
+        const token = oidc.user?.access_token;
         if (currentPicture && currentPicture._id)
-            PictureService.deletePicture(currentPicture._id)
+            PictureService.deletePicture(currentPicture._id,token!.toString())
                 .then(() => {
                     setLoading(false);
                     setDeleteResponse(true);

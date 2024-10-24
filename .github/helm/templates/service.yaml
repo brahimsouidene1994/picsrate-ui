@@ -7,7 +7,7 @@ metadata:
 spec:
   ports:
   - port: {{ $val.port }}
-    targetPort: {{ $val.target_port }}
+    targetPort: {{ $val.port }}
     protocol: TCP
     name: http
   selector:

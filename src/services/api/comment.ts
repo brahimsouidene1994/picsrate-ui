@@ -1,15 +1,15 @@
-import axios, { AxiosRequestConfig } from "axios";
-import authHeader from "./auth-header";
+import axios from "axios";
 import CommentObject from "../models/comment";
 
-const saveNewComment = async (commentData:CommentObject):Promise<void> => {
-    let headers:AxiosRequestConfig['headers'] = await authHeader();
+const saveNewComment = async (commentData:CommentObject,token:string):Promise<void> => {
     let url = `${process.env.REACT_APP_API}/api/comment/add`
     console.log("register ", url)
     try {
         await axios.post(url, commentData,
             {
-                headers: headers
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             },
         )
             .then(() => {
@@ -20,15 +20,16 @@ const saveNewComment = async (commentData:CommentObject):Promise<void> => {
     };
 }
 
-const getAllCommentOfPicture= async (idPicture:string):Promise<CommentObject[]> => {
-    let headers:AxiosRequestConfig['headers'] = await authHeader();
+const getAllCommentOfPicture= async (idPicture:string,token:string):Promise<CommentObject[]> => {
     let commentsOfCurrentPicture: CommentObject[]=[];
     let url = `${process.env.REACT_APP_API}/api/comment/getAllCommentByPicture/${idPicture}`
     console.log("register ->", url)
     try {
         await axios.get(url,
             {
-                headers: headers
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             },
         )
             .then(response => {
