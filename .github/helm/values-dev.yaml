@@ -5,6 +5,7 @@ frontend:
     host: "picsrate-ui.bbs-studio.tn"
     backend_url: "http://picsrate-service"
     keycloak_url: "https://auth.qa.picsrate.bbs-studio.tn"
+    frontend_url: "https://picsrate-ui.bbs-studio.tn"
     keycloak_realm: "picsrate"
     keycloak_client: "web_app"
     port: 80

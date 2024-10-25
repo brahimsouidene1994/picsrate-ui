@@ -23,6 +23,8 @@ spec:
           value: "false"
         - name: REACT_APP_API
           value: {{ $val.backend_url }}
+        - name: REACT_APP_UI
+          value: {{ $val.frontend_url }}
         - name: REACT_APP_KEYCLOAK_API
           value: {{ $val.keycloak_url }}
         - name: REACT_APP_KEYCLOAK_REALM
