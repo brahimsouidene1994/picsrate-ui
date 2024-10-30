@@ -1,0 +1,58 @@
+.body-new-test{
+    width: 100vw;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+}
+.form-test{
+    width: 100%;
+    height: 412px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.step-picture{
+    height: 90%;
+    width: 30%;
+    display: flex;
+    justify-content: center;
+}
+.picture-uploader{
+    border: 1px solid #000;
+    background-color: #efefef;
+    height: 100%;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.picture-loaded{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.step-separator{
+    height: 100%;
+    border: 1px solid gray;
+}
+.step-content{
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.step-content-traits{
+    display: flex;
+    flex-direction: column; 
+}

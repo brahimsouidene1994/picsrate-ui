@@ -14,23 +14,25 @@ spec:
       labels:
         app: {{ $key }}-dep
     spec:
-      # hostAliases:
-      # {{- range  $el := $val.dns }}
-      # - ip: {{ $el.ip }}
-      #   hostnames:
-      #   - {{ $el.host }}
-      # {{- end }}    
       containers:
       - image: {{ $val.image }}:{{ $val.tag }}
         imagePullPolicy: Always
         name: {{ $key }}
-        # env:
-        # - name: "BACKEND_URI"
-        #   value: {{ $val.backend_url }}
-        # - name: "PROXY_ADDRESS_FORWARDING"
-        #   value: "true"
+        env:
+        - name: GENERATE_SOURCEMAP
+          value: "false"
+        - name: REACT_APP_API
+          value: {{ $val.backend_url }}
+        - name: REACT_APP_UI
+          value: {{ $val.frontend_url }}
+        - name: REACT_APP_KEYCLOAK_API
+          value: {{ $val.keycloak_url }}
+        - name: REACT_APP_KEYCLOAK_REALM
+          value: {{ $val.keycloak_realm }}
+        - name: REACT_APP_KEYCLOAK_CLIENT
+          value: {{ $val.keycloak_client }}
         ports:
           - name: http
-            containerPort: 3000
+            containerPort: {{ $val.port }}
             protocol: TCP
 {{- end }}

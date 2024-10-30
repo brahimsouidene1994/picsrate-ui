@@ -1,0 +1,5 @@
+export const CATEGORY={
+    SOCIAL: 'SOCIAL',
+    BUSINESS :'BUSINESS',
+    DATING : 'DATING'
+}

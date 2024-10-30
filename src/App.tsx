@@ -1,24 +1,21 @@
 import React from 'react';
 import './App.css';
-import Navigation from './navigation';
-import keycloak from './keycloak';
+import Routes from './Routes';
+import { Provider } from 'react-redux';
+import { store } from './services/state';
+import Splash from './pages/splash';
+import { useAuth } from "react-oidc-context";
 function App() {
-  const[authenticated, setAuthenticated]=React.useState<boolean>(false)
-
-  React.useEffect(() => {checkAuth()},[]);
-
-  const checkAuth = async(): Promise<void> => {
-    try {
-      const authenticated = await keycloak.init({ onLoad: 'login-required' });
-      console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
-      setAuthenticated(authenticated);
-    } catch (error) {
-      console.error('Failed to initialize adapter:', error);
-    }
-  };
+  const auth = useAuth();
   return (
     <React.StrictMode>
-      <Navigation auth={authenticated}/>
+      {
+        auth.isLoading ? <Splash />
+          :
+          <Provider store={store}>
+            <Routes />
+          </Provider>
+      }
     </React.StrictMode>
   );
 }

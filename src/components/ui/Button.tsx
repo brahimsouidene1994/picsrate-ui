@@ -19,3 +19,20 @@ export const  ButtonContainer = Styled.button`
         font-weight:bolder;
     }
 `; 
+
+export const SignUpButton = Styled.button`
+  background: linear-gradient(to right, #2876cf, #d458ff); /* Primary background color */
+  color: white;
+  padding: 10px 25px;
+  font-size: 20px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  border: 1px solid #000;
+  
+  &:hover {
+    background: none;
+    color: #0B192C;
+    border: 1px solid #0B192C; /* Turns into outlined on hover */
+  }
+`;

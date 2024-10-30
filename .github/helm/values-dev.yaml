@@ -3,9 +3,23 @@ frontend:
     image: "studio-registry:5000/picsrate-ui"
     tag: "latest"
     host: "picsrate-ui.bbs-studio.tn"
-    # backend_url: "http://falcone-api-svc"
+    backend_url: "http://picsrate-service"
+    keycloak_url: "https://auth.qa.picsrate.bbs-studio.tn"
+    frontend_url: "https://picsrate-ui.bbs-studio.tn"
+    keycloak_realm: "picsrate"
+    keycloak_client: "web_app"
+    port: 80
+    target_port: 3000
     # dns:
     # - ip: "192.168.1.102"
     #   host: "keycloak.dev.alphalab.cloud"
     # - ip: "197.27.125.248"
     #   host: "keycloak.dev.alphalab.cloud"
+    ingress:
+      enabled: true
+      host: "picsrate-ui.bbs-studio.tn"
+      annotations:
+        ingress.kubernetes.io/ssl-redirect: "true"
+        traefik.ingress.kubernetes.io/rule-type: PathPrefix
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        kubernetes.io/ingress.class: traefik

@@ -6,8 +6,8 @@ metadata:
   name: {{ $key }}-svc
 spec:
   ports:
-  - port: 80
-    targetPort: 3000
+  - port: {{ $val.port }}
+    targetPort: {{ $val.port }}
     protocol: TCP
     name: http
   selector:
@@ -18,13 +18,16 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $key }}-ing
+  {{- with $val.ingress.annotations }}
   annotations:
-    ingress.kubernetes.io/ssl-redirect: "false"
-    kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/rule-type: PathPrefix
+    {{- range $ing_key, $ing_value := . }}
+    {{ $ing_key }}: {{ tpl $ing_value $ | quote }}
+    {{- end }}
+  {{- end }}
 spec:
+  ingressClassName: {{ $val.ingress.ingressClassName }}
   rules:
-    - host: {{ $val.host }}
+    - host: {{ $val.ingress.host }}
       http:
         paths:
         - path: /
@@ -34,5 +37,8 @@ spec:
               name: {{ $key }}-svc
               port:
                 name: http
+  tls:
+  - hosts:
+    - {{ $val.ingress.host }}
+    secretName: {{ $val.ingress.host }}-tls
 {{ end }}
-
