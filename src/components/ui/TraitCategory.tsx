@@ -1,8 +1,7 @@
-import React from 'react';
 import { Typography } from '@mui/material';
-import { CATEGORY } from '../../services/models/contants/Category';
-import { COLORS } from '../../services/models/contants/Colors';
-import { TRAIT } from '../../services/models/contants/Traits';
+import { CATEGORY } from 'services/models/contants/Category';
+import { COLORS } from 'services/models/contants/Colors';
+import { TRAIT } from 'services/models/contants/Traits';
 
 type PropsTraits = {
     category: string

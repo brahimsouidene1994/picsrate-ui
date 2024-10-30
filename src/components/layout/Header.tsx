@@ -27,9 +27,9 @@ export default function Header() {
                 </div>
                 <div className='header-navigation'>
                     <NavButton>
-                        <NavLink to='/app' className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}>
+                        <a href='#application' className={'inactive-link'}>
                             Application
-                        </NavLink>
+                        </a>
                     </NavButton>
                     {
                         auth ?

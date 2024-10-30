@@ -24,7 +24,6 @@ export default function Navigation() {
         else dispatch(disableAuth());
     };
     return (
-        // <React.Fragment>
         <Router>
             <Header />
             <div className='body'>
@@ -45,7 +44,6 @@ export default function Navigation() {
                 }
             </div>
             <Footer />
-
         </Router>
     )
 }
