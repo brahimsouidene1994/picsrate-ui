@@ -3,9 +3,9 @@ import { Badge, Box, Stack, Tab, Tabs, Typography, useTheme } from "@mui/materia
 import { MakeOptional } from '@mui/x-charts/internals';
 import { LineChart, LineSeriesType } from '@mui/x-charts';
 import { ProgressText, LightTooltip, NoteText, BorderLinearProgress } from '../ui/MStyledUi';
-import CommentObject from '../../services/models/comment';
-import { CATEGORY } from '../../services/models/contants/Category';
-import { TRAIT } from '../../services/models/contants/Traits';
+import CommentObject from 'services/models/comment';
+import { CATEGORY } from 'services/models/contants/Category';
+import { TRAIT } from 'services/models/contants/Traits';
 import { generateArray } from '../../utils/utilities';
 
 interface voteData {

@@ -6,15 +6,15 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import '../../assets/styles/NewTest.css'
-import { CATEGORY } from '../../services/models/contants/Category';
+import { CATEGORY } from 'services/models/contants/Category';
 import TraitCategory from '../../components/ui/TraitCategory';
 import { Alert, CircularProgress, Switch, TextField } from '@mui/material';
-import PictureService from '../../services/api/picture';
+import PictureService from 'services/api/picture';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/stateHooks';
-import { addOneToAlbum } from '../../services/state/reducers/album';
-import PictureObject from '../../services/models/picture';
+import { addOneToAlbum } from 'services/state/reducers/album';
+import PictureObject from 'services/models/picture';
 import { useAuth } from "react-oidc-context";
 
 const steps = ['Select picture', 'Set the title', 'Submitting'];
@@ -150,8 +150,8 @@ export default function NewTest() {
     }
 
     return (
-        <Box sx={{ width: '100%',marginTop: 10, marginBottom: 10, display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-            <Box sx={{ width: '70%' }}>
+        <Box sx={{width: '100vw',minHeight:'70vh',display: 'flex',justifyContent: 'center',padding: 3}}>
+            <Box sx={{ width: '70%' , marginTop:4}}>
                 <Stepper activeStep={activeStep}>
                     {steps.map((label, index) => {
                         const stepProps: { completed?: boolean } = {};

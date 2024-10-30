@@ -1,43 +1,23 @@
-import DatingImg from '../../assets/images/tinder03.jpg';
-import BusinessImg from '../../assets/images/pro.jpg';
-import DataTabs from '../../components/layout/DataTabs';
-import { Card } from '../../components/ui/Card';
-import { FaRegHeart, FaRegCommentDots } from "react-icons/fa";
+import BusinessImg from '../../assets/images/04.jpg';
+import HeartImg from '../../assets/images/heart.png';
+import BagImg from '../../assets/images/bag.png';
+import SocialImg from '../../assets/images/social.png';
+import imgAppStore from '../../assets/images/appbtnstore.png';
+import imgPlayStore from '../../assets/images/playstore.png';
 import '../../assets/styles/Acceuil.css';
-import { CATEGORY } from '../../services/models/contants/Category';
+import { CATEGORY } from 'services/models/contants/Category';
+import { Box, Typography } from '@mui/material';
+import TestDetails from '../../components/ui/TestDetails';
+import TestCards from '../../components/ui/TestCards';
+import { FakeVotes } from '../../utils/FakeData';
 export default function Acceuil() {
     return (
         <div className='acceuil'>
             <div className='section-one'>
                 <div className='first'>
                     <div className='dots'></div>
-                    <Card className='card'>
-                        <div className='card-header'>
-                            <h2>Tinder</h2>
-                        </div>
-                        <div className='card-body'>
-                            <img src={DatingImg} className='image' alt='card-image' />
-                            <div className='card-content'>
-                                <div className='context'>
-                                    <h2>he</h2>
-                                    <h2>Attractive</h2>
-                                </div>
-                                <div className='result'>
-                                    <h2>Social</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='card-footer'>
-                            <div className='likes'>
-                                <FaRegHeart color='#0B192C' size={32} />
-                                <h2>12</h2>
-                            </div>
-                            <div className='comments'>
-                                <FaRegCommentDots color='#0B192C' size={32} />
-                                <h2>12</h2>
-                            </div>
-                        </div>
-                    </Card>
+                    <div className='dots-two'></div>
+                    <TestCards />
                 </div>
                 <div className='separator'></div>
                 <div className='second'>
@@ -45,33 +25,66 @@ export default function Acceuil() {
                     <span className='desc'>Just upload your picture and let the community decide for you</span>
                 </div>
             </div>
-            <div className='section-two'>
-                <div className='first'>
-                    <h1>How it works</h1>
-                    <ul>
-                        <li>Follow Up Tests</li>
-                        <li>Consult Statistiques</li>
-                        <li>Receive feedbacks</li>
-                    </ul>
-                </div>
-                <div className='second'>
-                    <div className='card'>
-                        <div className='card-header'>
-                            <h2>BUSINESS</h2>
+            <div className='section-three'>
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+                    <Box sx={{ width: '90%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Box sx={{ width: '50%', paddingLeft: 8, paddingRight: 8 }}>
+                            <Typo text={'How it works'} size={64} bold={true} />
+                            <Typo text={'Follow Up Tests'} size={32} bold={false} />
+                            <Typo text={'Consult Statistiques'} size={32} bold={false} />
+                            <Typo text={'Receive feedbacks'} size={32} bold={false} />
+                        </Box>
+                        <div className='second'>
+                            <TestDetails path={BusinessImg} category={CATEGORY.BUSINESS} context={'Work Interview'} createDate={'2024-05-23'} votes={FakeVotes} />
                         </div>
-                        <div className='card-body'>
-                            <img src={BusinessImg} className='image' alt='card-image' />
+                    </Box>
+                </Box>
+            </div>
+            <div className='section-four'>
+                <Box sx={{ display: 'flex', flexDirection: 'column', height: '70vh' }}>
+                    <Typography sx={{ textAlign: 'center', fontSize: 64, fontFamily: 'Roboto,sans-serif', padding: '32px 0', color: '#5f1479', fontWeight: 'bold' }}>What Category</Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+                        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                            <Typo text={CATEGORY.BUSINESS} size={32} bold={true} />
+                            <img src={BagImg} style={{ width: '20%', height: 'auto' }} alt='card-image' />
+                            <Typo text={'Logo, CV...'} size={20} bold={false} />
+                        </Box>
+                        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                            <Typo text={CATEGORY.DATING} size={32} bold={true} />
+                            <img src={HeartImg} style={{ width: '20%', height: 'auto' }} alt='card-image' />
+                            <Typo text={'Tinder, Badoo...'} size={20} bold={false} />
+                        </Box>
+                        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                            <Typo text={CATEGORY.SOCIAL} size={32} bold={true} />
+                            <img src={SocialImg} style={{ width: '20%', height: 'auto' }} alt='card-image' />
+                            <Typo text={'Facebook, Instgram, WhatsUp...'} size={20} bold={false} />
+                        </Box>
+                    </Box>
+                </Box>
+            </div>
+            <div className='section-five' id="application">
+                <div className='app-links'>
+                    <div className='btns-section'>
+                        <p className='title-text'>Download the app now!</p>
+                        <div className='btns-download'>
+                            {/* <a href='#' target='_blank' rel="noreferrer"> */}
+                            <img src={imgAppStore} alt='appStore' className='btn-appStore' />
+                            {/* </a>
+                        <a href='#' target='_blank' rel="noreferrer"> */}
+                            <img src={imgPlayStore} alt='appStore' className='btn-appStore' />
+                            {/* </a> */}
                         </div>
-                        <div className='card-footer'>
-                            <div><h3>Title</h3><h2>Linked-In</h2></div>
-                        </div>
-                    </div>
-                    <div className='separator'></div>
-                    <div className='side-card'>
-                        <DataTabs category={CATEGORY.BUSINESS} votes={[]}/>
                     </div>
                 </div>
             </div>
         </div>
     )
+}
+type typoProps = {
+    text: string;
+    size: number;
+    bold: boolean;
+}
+const Typo = ({ text, size, bold }: typoProps) => {
+    return <Typography sx={{ fontFamily: 'Roboto,sans-serif', fontSize: size, color: '#1E3E62', fontWeight: bold ? 'bold' : 'normal' }} gutterBottom={true}>{text}</Typography>
 }

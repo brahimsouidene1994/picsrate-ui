@@ -1,4 +1,4 @@
-import { LinearProgress, linearProgressClasses, LinearProgressProps, Slider, SliderTypeMap, styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
+import { LinearProgress, linearProgressClasses, LinearProgressProps, Slider, styled, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
 
 interface CustomLinearProgressProps extends LinearProgressProps {
     start_gradiant?: string;

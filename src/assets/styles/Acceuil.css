@@ -16,7 +16,7 @@
     flex-direction: column;
 }
 .section-one{
-    height: auto;
+    height: 80vh;
     width: 100%;
     padding: 10px 20px;
 }
@@ -28,7 +28,7 @@
 }
 .section-one .first {
     width: 100%;
-    height: 80vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -162,7 +162,7 @@
 .section-one .second .title{
     width: 70%;
     font-size: 64px;
-    background: -webkit-linear-gradient(#2876cf, #d458ff);
+    background: -webkit-linear-gradient(#2876cf, #9d48bb);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-family: Roboto,sans-serif;
@@ -230,8 +230,22 @@
 }
 .dots {
     position: absolute;
-    width: 60%;
-    height: 120%;
+    width: 50%;
+    height: 30%;
+    left:0;
+    bottom:0;
+    background: radial-gradient(#9d48bb 10px, transparent 0px);
+    background-size: 50px 50px;
+    background-position: center;
+    border: none;
+    
+}
+.dots-two {
+    position: absolute;
+    width: 50%;
+    height: 30%;
+    top:0;
+    right:0;
     background: radial-gradient(#2b639d 10px, transparent 0px);
     background-size: 50px 50px;
     background-position: center;
@@ -291,12 +305,61 @@
     text-transform: uppercase;
 }
 .section-three{
-    /*background-image: url("../images/1.jpg");
-    background-size: contain; /* Scale the image while keeping its aspect ratio 
+    height: auto;
+    width: 100vw;
+    background-image: url("../images/bg-gradiant.jpg");
+    background-size: cover; /* Scale the image while keeping its aspect ratio */
     background-repeat: no-repeat;
-    background-position: center;
-    width: 100%; /* Set the width (or any specific width) 
-    height: auto; /* Auto height based on the width 
-    aspect-ratio: 16 / 9; /* Optional: Adjust the aspect ratio based on the image */
+    /* width: 100%; /* Set the width (or any specific width) 
+    height: auto; Auto height based on the width */
+    aspect-ratio: 16 / 7; /* Optional: Adjust the aspect ratio based on the image*/
+}
+.section-three .second{
+    width: 80%;
+    height: 75%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: transparent;
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 2) 
+}
+.section-four{
+    width: 100vw;
+    background: '#fff';
+}
 
+.app-links{
+    position: relative;
+    max-width: 100vw;
+    height: 100vh;
+    background: url('../images/bg-img.jpg');
+    background-size: cover;
+    padding-top: 20px;
+    z-index: 2;
+}
+.btns-section {
+    /* background-color: #257efa !important; */
+    background: transparent;
+    height: 100%;
+    width: 40%;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 35px;
+}
+.title-text{
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+    color: #021773;
+    text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+    margin-top: 50px;
+    font-size: 3rem;
+}
+.btn-appStore{
+    width: 300px;
+    height: 120px;
 }

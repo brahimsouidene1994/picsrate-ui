@@ -1,14 +1,14 @@
 import { Box, CircularProgress, Divider, TextField, Typography } from "@mui/material";
-import PictureObject from "../../services/models/picture";
+import PictureObject from "services/models/picture";
 import React from "react";
-import PictureService from '../../services/api/picture';
+import PictureService from 'services/api/picture';
 import Slider from "../../components/ui/Slider";
-import { TRAIT } from "../../services/models/contants/Traits";
-import { TraitColors } from "../../utils/FakeData";
+import { TRAIT } from "services/models/contants/Traits";
+import { TraitColors } from "services/models/contants/TraitColors";
 import { HiRefresh } from "react-icons/hi";
 import { LoadingButton } from "@mui/lab";
-import CommentObject from "../../services/models/comment";
-import CommentService from "../../services/api/comment";
+import CommentObject from "services/models/comment";
+import CommentService from "services/api/comment";
 import { useAuth } from "react-oidc-context";
 
 export default function Vote() {
@@ -57,7 +57,7 @@ export default function Vote() {
     }
 
     return (
-        <Box sx={{ width: '100%', marginTop: 10, marginBottom: 10, display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+        <Box sx={{width: '100vw',minHeight:'70vh',display: 'flex',justifyContent: 'center',padding: 3}}>
             <Box sx={{ width: '70%', paddingLeft: 8, paddingRight: 8 }}>
                 <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', paddingTop: 2, paddingBottom: 2 }}>
                     <Box sx={{ width: '45%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 5, paddingBottom: 5, paddingRight: 5 }}>
