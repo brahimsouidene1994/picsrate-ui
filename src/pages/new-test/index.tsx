@@ -179,7 +179,7 @@ export default function NewTest() {
                         }
                         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                             <Box sx={{ flex: '1 1 auto' }} />
-                            <Button onClick={handleReset}>Continue</Button>
+                            <Button onClick={handleReset} disabled={loading}>Continue</Button>
                         </Box>
                     </React.Fragment>
                 ) : (

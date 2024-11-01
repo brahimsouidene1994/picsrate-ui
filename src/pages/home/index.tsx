@@ -7,11 +7,13 @@ import { setAlbum } from 'services/state/reducers/album';
 import { Box, ImageList, ImageListItem, ImageListItemBar, Typography } from '@mui/material';
 import { FaCircle } from "react-icons/fa6";
 import { useAuth } from "react-oidc-context";
+import Img from 'components/ui/Img';
 export default function Home() {
   const oidc = useAuth();
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
   const album = useAppSelector(state => state.album.value)
+
   React.useEffect(() => {
     if (album.length === 0) {
       getAlbum()
@@ -74,13 +76,7 @@ export default function Home() {
               key={item.path}
               onClick={() => navigate(`/details/${item._id}`)}
             >
-              <img
-                style={{ borderTopRightRadius: '10px', borderTopLeftRadius: '10px', height: '85%' }}
-                srcSet={`${item.path}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                src={`${item.path}?w=248&fit=crop&auto=format`}
-                alt={item.contextPic}
-                loading="lazy"
-              />
+              <Img src={item.path} alt={item.contextPic} />
               <ImageListItemBar
                 sx={{
                   borderTopLeftRadius: "10px", borderTopRightRadius: "10px", textAlign: 'center', height: "2.5rem",
