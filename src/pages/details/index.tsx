@@ -4,16 +4,17 @@ import CommentObject from "services/models/comment";
 import PictureService from 'services/api/picture';
 import CommentService from 'services/api/comment';
 import DataTabs from "../../components/ui/DataTabs";
-import { FaCircle, FaPause, FaPlay } from "react-icons/fa";
+import { FaCircle, FaPause, FaPlay, FaArrowLeft } from "react-icons/fa";
 import { TbTrash } from "react-icons/tb";
 import { LoadingButton } from "@mui/lab";
 import { useAppDispatch } from "../../hooks/stateHooks";
-import { deleteOneFromAlbum } from "services/state/reducers/album";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
+import { deleteOneFromAlbum, updateOneFromAlbum } from "services/state/reducers/album";
+import { Box, Divider, IconButton, Tooltip, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { roundNumber, wait } from "../../utils/utilities";
 import AlertUi from "../../components/ui/AlertUi";
 import { useAuth } from "react-oidc-context";
+import DialogUi from "components/ui/DialogUi";
 export default function Details() {
     const oidc = useAuth();
     const { id } = useParams();
@@ -31,12 +32,12 @@ export default function Details() {
 
     // loading
     const [loading, setLoading] = React.useState(false);
-    
+
     // update picture status
     const [updateResponse, setUpdateResponse] = React.useState(false);
     const [alertVisibility, setAlertVisibility] = React.useState(false);
     const [alertMessage, setAlertMessage] = React.useState('');
-    
+
     // delete picture
     const [showDialog, setShowDialog] = React.useState(false);
     const [deleteResponse, setDeleteResponse] = React.useState<boolean>(false);
@@ -47,12 +48,12 @@ export default function Details() {
     }, [currentPicture]);
     const getCurrentPicture = (id: string) => {
         const token = oidc.user?.access_token;
-        PictureService.getOnePicture(id,token!.toString())
+        PictureService.getOnePicture(id, token!.toString())
             .then(response => {
                 if (response === null) return;
                 if (response) {
                     setCurrentPicture(response);
-                    CommentService.getAllCommentOfPicture(id,token!.toString())
+                    CommentService.getAllCommentOfPicture(id, token!.toString())
                         .then((res) => {
                             if (res === null) return;
                             if (res) {
@@ -112,13 +113,14 @@ export default function Details() {
                 setAlertMessage('Picture was successfully updated.');
                 setLoading(false);
                 setBtnState(false);
+                dispatch(updateOneFromAlbum(id!.toString()))
                 setCurrentPicture(prevCurrentPictureState => {
                     let updatedPicture = Object.assign({}, prevCurrentPictureState);
                     updatedPicture.status = !currentPicture?.status;
                     return updatedPicture;
                 });
             })
-            .catch((error:Error) => {
+            .catch((error: Error) => {
                 setAlertVisibility(true);
                 handleAlertVisibility();
                 setUpdateResponse(false);
@@ -132,14 +134,14 @@ export default function Details() {
 
         const token = oidc.user?.access_token;
         if (currentPicture && currentPicture._id)
-            PictureService.deletePicture(currentPicture._id,token!.toString())
+            PictureService.deletePicture(currentPicture._id, token!.toString())
                 .then(() => {
                     setLoading(false);
                     setDeleteResponse(true);
                     setDeleteResponseMessage('Deleted successfully');
                     filterPictures(currentPicture?._id!.toString());
                 })
-                .catch((error:Error) => {
+                .catch((error: Error) => {
                     setDeleteResponse(true);
                     setDeleteResponseMessage(error.message);
                     setLoading(false);
@@ -181,11 +183,16 @@ export default function Details() {
     }
 
     return (
-        <Box sx={{ height: 'auto', width: '100vw', marginTop: 10, marginBottom: 10, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+        <Box sx={{ height: 'auto', width: '100vw', marginTop: 6, marginBottom: 6, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
 
             {alertVisibility &&
-                <AlertUi updateResponse={updateResponse} message={alertMessage} handleVisibility={setAlertVisibility}/>
+                <AlertUi updateResponse={updateResponse} message={alertMessage} handleVisibility={setAlertVisibility} />
             }
+            <Box sx={{ width: '70%', paddingLeft: 8 }}>
+                <IconButton aria-label="go back" onClick={() => navigate(-1)}>
+                    <FaArrowLeft size={28} color="#0B192C" />
+                </IconButton>
+            </Box>
             {currentPicture &&
                 <Box sx={{ width: '70%', display: 'flex', flexDirection: 'column' }}>
                     <Box sx={{ width: '100%', paddingLeft: 8, paddingRight: 8, paddingTop: 5 }}>
@@ -217,18 +224,22 @@ export default function Details() {
                             </Box>
                             <Divider orientation="vertical" variant="middle" flexItem />
                             <Box sx={{ width: '60%', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
-                                <LoadingButton
-                                    size="large"
-                                    variant="outlined"
-                                    startIcon={<TbTrash />}
-                                    loadingPosition="start"
-                                    loading={loading}
-                                    disabled={currentPicture.status}
-                                    onClick={handleDeleteDialog}
-                                    color="error"
-                                >
-                                    Delete
-                                </LoadingButton>
+                                <Tooltip title={currentPicture.status ? "Must stop the test first" : "Delete the test"}>
+                                    <span>
+                                        <LoadingButton
+                                            size="large"
+                                            variant="outlined"
+                                            startIcon={<TbTrash />}
+                                            loadingPosition="start"
+                                            loading={loading}
+                                            disabled={currentPicture.status}
+                                            onClick={handleDeleteDialog}
+                                            color="error"
+                                        >
+                                            Delete
+                                        </LoadingButton>
+                                    </span>
+                                </Tooltip>
                                 <LoadingButton
                                     size="large"
                                     color={currentPicture.status ? 'error' : 'success'}
@@ -251,12 +262,12 @@ export default function Details() {
                                     <Typography sx={{ fontSize: '1.7rem', color: '#fff', textAlign: 'center' }}>{currentPicture.category}</Typography>
                                 </Box>
                                 <img src={currentPicture.path} alt={'current-picture'} style={{ width: '100%', marginTop: '16px', marginBottom: '16px' }} />
-                                <Box sx={{ width: '100%', backgroundColor: 'transparent', display:'flex', flexDirection:'row' }}>
-                                    <Box sx={{ width: '100%'}}>
+                                <Box sx={{ width: '100%', backgroundColor: 'transparent', display: 'flex', flexDirection: 'row' }}>
+                                    <Box sx={{ width: '100%' }}>
                                         <Typography sx={{ fontSize: '1.2rem', color: '#0b192cb8', textAlign: 'start' }}>Title</Typography>
                                         <Typography sx={{ fontSize: '1.5rem', color: '#0B192C', textAlign: 'start', textTransform: 'capitalize' }}>{currentPicture.contextPic}</Typography>
-                                    </Box>                                    
-                                    <Box sx={{ width: '100%'}}>
+                                    </Box>
+                                    <Box sx={{ width: '100%' }}>
                                         <Typography sx={{ fontSize: '1.2rem', color: '#0b192cb8', textAlign: 'start' }}>Created At</Typography>
                                         <Typography sx={{ fontSize: '1.5rem', color: '#0B192C', textAlign: 'start', textTransform: 'capitalize' }}>{formatDate(currentPicture.createdAt)}</Typography>
                                     </Box>
@@ -265,58 +276,20 @@ export default function Details() {
                             <Divider orientation="vertical" variant="middle" flexItem />
                             <Box sx={{ width: '90%', padding: 5 }}>
                                 {currentPicture.voters?.length ?
-                                <DataTabs category={currentPicture.category} votes={votes}/>
-                                :
-                                <Box sx={{ height: '80%', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center',flexDirection:'column' }}>
-                                    <Typography sx={{fontFamily:'Roboto,sans-serif', fontSize:'2rem', textTransform:'capitalize'}}>No votes yet</Typography>
-                                    <Typography sx={{fontFamily:'Roboto,sans-serif', fontSize:'1.2rem', textTransform:'capitalize', textAlign:'center'}}>As soon as you get new vote, this section will be automatically displayed</Typography>
-                                    <Typography sx={{fontFamily:'Roboto,sans-serif', fontSize:'1rem', textTransform:'capitalize',textAlign:'center'}}><span style={{fontWeight:'bold'}}>Tip:</span> take and give tip, make sure to vote some users pictures, by doing that you will automatically increase the chances to make your pictures tests appear at the first swipes</Typography>
-                                </Box>
-                            }
+                                    <DataTabs category={currentPicture.category} votes={votes} />
+                                    :
+                                    <Box sx={{ height: '80%', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'column' }}>
+                                        <Typography sx={{ fontFamily: 'Roboto,sans-serif', fontSize: '2rem', textTransform: 'capitalize' }}>No votes yet</Typography>
+                                        <Typography sx={{ fontFamily: 'Roboto,sans-serif', fontSize: '1.2rem', textTransform: 'capitalize', textAlign: 'center' }}>As soon as you get new vote, this section will be automatically displayed</Typography>
+                                        <Typography sx={{ fontFamily: 'Roboto,sans-serif', fontSize: '1rem', textTransform: 'capitalize', textAlign: 'center' }}><span style={{ fontWeight: 'bold' }}>Tip:</span> take and give tip, make sure to vote some users pictures, by doing that you will automatically increase the chances to make your pictures tests appear at the first swipes</Typography>
+                                    </Box>
+                                }
                             </Box>
                         </Box>
                     </Box>
                 </Box>
             }
-            <Dialog
-                open={showDialog}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                {!deleteResponse ?
-                    <React.Fragment>
-                        <DialogTitle id="alert-dialog-title">{"Confirm Action"}</DialogTitle>
-                        <DialogContent>
-                            <Typography>
-                                Are you sure you want to delete this picture?
-                            </Typography>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleClose} color="primary" autoFocus={true} >
-                                Cancel
-                            </Button>
-                            <Button onClick={() => deletePicture()} color="primary" >
-                                Confirm
-                            </Button>
-                        </DialogActions>
-                    </React.Fragment>
-                    :
-                    <React.Fragment>
-                        <DialogTitle id="alert-dialog-title">{"Request Response"}</DialogTitle>
-                        <DialogContent>
-                            <Typography>
-                                {deleteResponseMessage}
-                            </Typography>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={handleClose} color="primary">
-                                Close
-                            </Button>
-                        </DialogActions>
-                    </React.Fragment>
-                }
-            </Dialog>
+            <DialogUi deletePicture={deletePicture} deleteResponse={deleteResponse} deleteResponseMessage={deleteResponseMessage} handleClose={handleClose} showDialog={showDialog} />
         </Box>
     )
 }

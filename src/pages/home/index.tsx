@@ -18,7 +18,8 @@ export default function Home() {
     if (album.length === 0) {
       getAlbum()
     }
-  }, [])
+  }, [album])
+
   const getAlbum = (): void => {
 
     const token = oidc.user?.access_token;
