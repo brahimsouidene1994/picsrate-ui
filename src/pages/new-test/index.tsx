@@ -10,12 +10,14 @@ import { CATEGORY } from 'services/models/contants/Category';
 import TraitCategory from '../../components/ui/TraitCategory';
 import { Alert, CircularProgress, Switch, TextField } from '@mui/material';
 import PictureService from 'services/api/picture';
+import AiService from 'services/api/ai';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/stateHooks';
 import { addOneToAlbum } from 'services/state/reducers/album';
 import PictureObject from 'services/models/picture';
 import { useAuth } from "react-oidc-context";
+
 
 const steps = ['Select picture', 'Set the title', 'Submitting'];
 
@@ -26,22 +28,27 @@ export default function NewTest() {
     const dispatch = useAppDispatch()
 
     // response
-    const [loading, setLoading] = React.useState(false);
-    const [responseStatus, setResponseStatus] = React.useState(false);
-    const [responseMessage, setResponseMessage] = React.useState('');
+    const [loading, setLoading] = React.useState<boolean>(false);
+    const [responseStatus, setResponseStatus] = React.useState<boolean>(false);
+    const [responseMessage, setResponseMessage] = React.useState<string>('');
     const [newPicture, setNewPicture] = React.useState<PictureObject | null>(null);
 
     // picture
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
     const [previewPicture, setPreviewPicture] = React.useState<string | null>(null);
     const [category, setCategory] = React.useState<string>('');
-    const [title, setTitle] = React.useState('');
-    const [commentStatus, setCommentStatus] = React.useState(true);
+    const [title, setTitle] = React.useState<string>('');
+    const [commentStatus, setCommentStatus] = React.useState<boolean>(true);
 
     // tabs
-    const [nextTab, setNextTab] = React.useState(true);
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [stepBacked, setStepBacked] = React.useState(false);
+    const [nextTab, setNextTab] = React.useState<boolean>(true);
+    const [activeStep, setActiveStep] = React.useState<number>(0);
+    const [stepBacked, setStepBacked] = React.useState<boolean>(false);
+
+    // ai
+    const [aiLoading, setAiLoading] = React.useState<boolean>(false);
+    const [aiResponse, setAiResponse] = React.useState<number>(-1);
+    const [aiResponseMessage, setAiResponseMessage] = React.useState<string>('');
 
     React.useEffect(() => {
         if (activeStep === steps.length - 1) {
@@ -121,9 +128,25 @@ export default function NewTest() {
 
         // Create a preview if a file is selected
         if (selectedFile) {
-            const objectUrl = URL.createObjectURL(selectedFile);
-            console.log(objectUrl)
-            setPreviewPicture(objectUrl);
+            setAiLoading(true)
+            AiService.scanPicture(selectedFile, category)
+                .then((response: number) => {
+                    console.log("handleFileChange", response)
+                    setAiLoading(false)
+                    setAiResponse(response)
+                    if (response > 0) {
+                        const objectUrl = URL.createObjectURL(selectedFile);
+                        setPreviewPicture(objectUrl);
+                    } else if (response === 0) {
+                        setAiResponseMessage("Image not appropriate")
+                        setPreviewPicture(null);
+                        setNextTab(true);
+                    }
+                    else {
+                        setPreviewPicture(null);
+                        setNextTab(true);
+                    }
+                })
             if (category) setNextTab(false)
         } else {
             setPreviewPicture(null);
@@ -150,8 +173,8 @@ export default function NewTest() {
     }
 
     return (
-        <Box sx={{width: '100vw',minHeight:'70vh',display: 'flex',justifyContent: 'center',padding: 3}}>
-            <Box sx={{ width: '70%' , marginTop:4}}>
+        <Box sx={{ width: '100vw', minHeight: '70vh', display: 'flex', justifyContent: 'center', padding: 3 }}>
+            <Box sx={{ width: '70%', marginTop: 4 }}>
                 <Stepper activeStep={activeStep}>
                     {steps.map((label, index) => {
                         const stepProps: { completed?: boolean } = {};
@@ -186,46 +209,79 @@ export default function NewTest() {
                     <React.Fragment>
                         <div className='form-test'>
                             <div className='step-picture'>
-                                {!previewPicture ?
-                                    <div className='picture-uploader'>
-                                        <label htmlFor="contained-button-file">
-                                            <Button variant="contained" component="span">
-                                                Upload Image
-                                                <input
-                                                    accept="image/*"
-                                                    style={{ display: 'none' }}
-                                                    id="contained-button-file"
-                                                    multiple
-                                                    type="file"
-                                                    onChange={handleFileChange}
-                                                />
-                                            </Button>
-                                        </label>
-
-                                    </div>
+                                {aiLoading ?
+                                    <Box>
+                                        <CircularProgress />
+                                        <Typography>Ai scanning</Typography>
+                                    </Box>
                                     :
-                                    <div className='picture-loaded'>
-                                        <img
-                                            width="100%"
-                                            style={{ height: activeStep === 0 ? '100%' : '80%', width: '70%' }}
-                                            src={previewPicture}
-                                        />
-                                        {activeStep === 0 &&
-                                            <label htmlFor="contained-button-file" style={{ marginTop: 20 }}>
+                                    <>
+                                        {aiResponse < 0 &&
+                                            <div className='picture-uploader'>
+                                                <label htmlFor="contained-button-file">
+                                                    <Button variant="contained" component="span">
+                                                        Upload Picture
+                                                        <input
+                                                            accept="image/*"
+                                                            style={{ display: 'none' }}
+                                                            id="contained-button-file"
+                                                            multiple
+                                                            type="file"
+                                                            onChange={handleFileChange}
+                                                        />
+                                                    </Button>
+                                                </label>
 
-                                                <Button variant="contained" component="span">
-                                                    Select Image
-                                                    <input
-                                                        accept="image/*"
-                                                        style={{ display: 'none' }}
-                                                        id="contained-button-file"
-                                                        multiple
-                                                        type="file"
-                                                        onChange={handleFileChange}
-                                                    />
-                                                </Button>
-                                            </label>}
-                                    </div>
+                                            </div>
+
+                                        }
+                                        {aiResponse > 0 ?
+                                            <>
+                                                {previewPicture &&
+                                                    <div className='picture-loaded'>
+                                                        <img
+                                                            width="100%"
+                                                            style={{ height: activeStep === 0 ? '100%' : '80%', width: '70%' }}
+                                                            src={previewPicture}
+                                                        />
+                                                        {activeStep === 0 &&
+                                                            <label htmlFor="contained-button-file" style={{ marginTop: 20 }}>
+
+                                                                <Button variant="contained" component="span">
+                                                                    Change Image
+                                                                    <input
+                                                                        accept="image/*"
+                                                                        style={{ display: 'none' }}
+                                                                        id="contained-button-file"
+                                                                        multiple
+                                                                        type="file"
+                                                                        onChange={handleFileChange}
+                                                                    />
+                                                                </Button>
+                                                            </label>}
+                                                    </div>
+                                                }
+                                            </>
+                                            :
+                                            <Box>
+                                                <Typography>{aiResponseMessage}</Typography>
+                                                <label htmlFor="contained-button-file" style={{ marginTop: 20 }}>
+
+                                                    <Button variant="contained" component="span">
+                                                        Select Image
+                                                        <input
+                                                            accept="image/*"
+                                                            style={{ display: 'none' }}
+                                                            id="contained-button-file"
+                                                            multiple
+                                                            type="file"
+                                                            onChange={handleFileChange}
+                                                        />
+                                                    </Button>
+                                                </label>
+                                            </Box>
+                                        }
+                                    </>
                                 }
                             </div>
                             <div className='step-separator'></div>
