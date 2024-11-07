@@ -186,7 +186,7 @@ export default function Details() {
         <Box sx={{ height: 'auto', width: '100vw', marginTop: 6, marginBottom: 6, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
 
             {alertVisibility &&
-                <AlertUi updateResponse={updateResponse} message={alertMessage} handleVisibility={setAlertVisibility} />
+                <AlertUi updateResponse={updateResponse} message={alertMessage} handleVisibility={setAlertVisibility} top={"-40px"} height={"80px"} width={"40%"}/>
             }
             <Box sx={{ width: '70%', paddingLeft: 8 }}>
                 <IconButton aria-label="go back" onClick={() => navigate(-1)}>

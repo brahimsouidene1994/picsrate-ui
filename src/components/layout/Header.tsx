@@ -17,7 +17,7 @@ export default function Header() {
     }
     const handleRegister = () => {
         oidc.signinRedirect();
-      };
+    };
     return (
         <div className='header'>
             <div className='header-content'>
@@ -26,11 +26,6 @@ export default function Header() {
                     <h1>PicRate</h1>
                 </div>
                 <div className='header-navigation'>
-                    <NavButton>
-                        <a href='#application' className={'inactive-link'}>
-                            Application
-                        </a>
-                    </NavButton>
                     {
                         auth ?
                             <>
@@ -55,6 +50,11 @@ export default function Header() {
                             </>
                             :
                             <>
+                                <NavButton>
+                                    <a href='#application' className={'inactive-link'}>
+                                        Application
+                                    </a>
+                                </NavButton>
                                 <NavButton onClick={handleLogin}>
                                     Login
                                 </NavButton>

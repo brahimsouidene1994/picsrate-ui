@@ -17,7 +17,8 @@ import { useAppDispatch } from '../../hooks/stateHooks';
 import { addOneToAlbum } from 'services/state/reducers/album';
 import PictureObject from 'services/models/picture';
 import { useAuth } from "react-oidc-context";
-
+import AlertUi from 'components/ui/AlertUi';
+import { wait } from "../../utils/utilities";
 
 const steps = ['Select picture', 'Set the title', 'Submitting'];
 
@@ -49,6 +50,7 @@ export default function NewTest() {
     const [aiLoading, setAiLoading] = React.useState<boolean>(false);
     const [aiResponse, setAiResponse] = React.useState<number>(-1);
     const [aiResponseMessage, setAiResponseMessage] = React.useState<string>('');
+    const [alertVisibility, setAlertVisibility] = React.useState(false);
 
     React.useEffect(() => {
         if (activeStep === steps.length - 1) {
@@ -138,7 +140,9 @@ export default function NewTest() {
                         const objectUrl = URL.createObjectURL(selectedFile);
                         setPreviewPicture(objectUrl);
                     } else if (response === 0) {
-                        setAiResponseMessage("Image not appropriate")
+                        setAlertVisibility(true)
+                        handleAlertVisibility()
+                        setAiResponseMessage("Picture not appropriate")
                         setPreviewPicture(null);
                         setNextTab(true);
                     }
@@ -172,8 +176,12 @@ export default function NewTest() {
         setCommentStatus(event.target.checked)
     }
 
+    const handleAlertVisibility = () => {
+        wait(5000).then(() => setAlertVisibility(false));
+    }
+
     return (
-        <Box sx={{ width: '100vw', minHeight: '70vh', display: 'flex', justifyContent: 'center', padding: 3 }}>
+        <Box sx={{ width: '100vw', minHeight: '70vh', display: 'flex', justifyContent: 'center', paddingTop: 5, paddingBottom:5 }}>
             <Box sx={{ width: '70%', marginTop: 4 }}>
                 <Stepper activeStep={activeStep}>
                     {steps.map((label, index) => {
@@ -210,37 +218,42 @@ export default function NewTest() {
                         <div className='form-test'>
                             <div className='step-picture'>
                                 {aiLoading ?
-                                    <Box>
+                                    <Box sx={{display:'flex',flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
                                         <CircularProgress />
-                                        <Typography>Ai scanning</Typography>
+                                        <Typography>Ai Scanning</Typography>
                                     </Box>
                                     :
                                     <>
-                                        {aiResponse < 0 &&
-                                            <div className='picture-uploader'>
-                                                <label htmlFor="contained-button-file">
-                                                    <Button variant="contained" component="span">
-                                                        Upload Picture
-                                                        <input
-                                                            accept="image/*"
-                                                            style={{ display: 'none' }}
-                                                            id="contained-button-file"
-                                                            multiple
-                                                            type="file"
-                                                            onChange={handleFileChange}
-                                                        />
-                                                    </Button>
-                                                </label>
+                                        {aiResponse <= 0 ?
+                                            <>
+                                                <div className='picture-uploader'>
+                                                    <label htmlFor="contained-button-file">
+                                                        <Button variant="contained" component="span">
+                                                            Upload Picture
+                                                            <input
+                                                                accept="image/*"
+                                                                style={{ display: 'none' }}
+                                                                id="contained-button-file"
+                                                                multiple
+                                                                type="file"
+                                                                onChange={handleFileChange}
+                                                            />
+                                                        </Button>
+                                                    </label>
 
-                                            </div>
+                                                </div>
+                                                {alertVisibility &&
+                                                    <AlertUi updateResponse={false} message={aiResponseMessage} handleVisibility={setAlertVisibility} top={"100%"} height={"48px"} width={"70%"}/>
+                                                }
+                                            </>
 
-                                        }
-                                        {aiResponse > 0 ?
+                                            :
                                             <>
                                                 {previewPicture &&
                                                     <div className='picture-loaded'>
                                                         <img
                                                             width="100%"
+                                                            alt="preview-picture"
                                                             style={{ height: activeStep === 0 ? '100%' : '80%', width: '70%' }}
                                                             src={previewPicture}
                                                         />
@@ -262,24 +275,6 @@ export default function NewTest() {
                                                     </div>
                                                 }
                                             </>
-                                            :
-                                            <Box>
-                                                <Typography>{aiResponseMessage}</Typography>
-                                                <label htmlFor="contained-button-file" style={{ marginTop: 20 }}>
-
-                                                    <Button variant="contained" component="span">
-                                                        Select Image
-                                                        <input
-                                                            accept="image/*"
-                                                            style={{ display: 'none' }}
-                                                            id="contained-button-file"
-                                                            multiple
-                                                            type="file"
-                                                            onChange={handleFileChange}
-                                                        />
-                                                    </Button>
-                                                </label>
-                                            </Box>
                                         }
                                     </>
                                 }
