@@ -19,26 +19,23 @@ export default function Acceuil() {
                     <div className='dots-two'></div>
                     <TestCards />
                 </div>
-                <div className='separator'></div>
                 <div className='second'>
                     <h1 className='title'>Struggling to select the right picture ?</h1>
                     <span className='desc'>Just upload your picture and let the community decide for you</span>
                 </div>
             </div>
-            <div className='section-three'>
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
-                    <Box sx={{ width: '90%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Box sx={{ width: '50%', paddingLeft: 8, paddingRight: 8 }}>
-                            <Typo text={'How it works'} size={64} bold={true} />
-                            <Typo text={'Follow Up Tests'} size={32} bold={false} />
-                            <Typo text={'Consult Statistiques'} size={32} bold={false} />
-                            <Typo text={'Receive feedbacks'} size={32} bold={false} />
-                        </Box>
-                        <div className='second'>
-                            <TestDetails path={BusinessImg} category={CATEGORY.BUSINESS} context={'Work Interview'} createDate={'2024-05-23'} votes={FakeVotes} />
-                        </div>
-                    </Box>
-                </Box>
+            <div className='section-two'>
+                <div className='first'>
+                    <Typo text={'How it works'} size={64} bold={true} />
+                    <Typo text={'Follow Up Tests'} size={32} bold={false} />
+                    <Typo text={'Consult Statistiques'} size={32} bold={false} />
+                    <Typo text={'Receive feedbacks'} size={32} bold={false} />
+                </div>
+                <div className='second'>
+                    <TestDetails path={BusinessImg} category={CATEGORY.BUSINESS} context={'Work Interview'} createDate={'2024-05-23'} votes={FakeVotes} />
+                </div>
+
+
             </div>
             <div className='section-four'>
                 <Box sx={{ display: 'flex', flexDirection: 'column', height: '70vh' }}>
