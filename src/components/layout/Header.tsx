@@ -1,3 +1,4 @@
+import React from 'react';
 import '../../assets/styles/Header.css';
 import { SignUpButton } from '../ui/Button';
 import { NavButton } from '../ui/NavButton';
@@ -8,16 +9,23 @@ import { useAuth } from "react-oidc-context";
 export default function Header() {
     const oidc = useAuth();
     const auth = useAppSelector(state => state.auth.value)
+    const [isOpenResponsive, setIsOpenResponsive] = React.useState(false);
 
     const handleLogin = () => {
+        handleResponsiveMenuToggle()
         oidc.signinRedirect();
     }
     const handleLogout = () => {
+        handleResponsiveMenuToggle()
         oidc.signoutRedirect();
     }
     const handleRegister = () => {
+        handleResponsiveMenuToggle()
         oidc.signinRedirect();
     };
+    const handleResponsiveMenuToggle = () => {
+        setIsOpenResponsive(!isOpenResponsive);
+    }
     return (
         <div className='header'>
             <div className='header-content'>
@@ -25,21 +33,26 @@ export default function Header() {
                     <img src={Logo} className='log-image' alt='logo-image' />
                     <h1>PicRate</h1>
                 </div>
-                <div className='header-navigation'>
+                <div className="hamburger" onClick={handleResponsiveMenuToggle}>
+                    <div className="line"></div>
+                    <div className="line"></div>
+                    <div className="line"></div>
+                </div>
+                <div className={`header-navigation ${isOpenResponsive ? 'open' : ''}`}>
                     {
                         auth ?
                             <>
-                                <NavButton>
+                                <NavButton onClick={handleResponsiveMenuToggle}>
                                     <NavLink to='/' className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}>
                                         Home
                                     </NavLink>
                                 </NavButton>
-                                <NavButton>
+                                <NavButton onClick={handleResponsiveMenuToggle}>
                                     <NavLink to='/new' className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}>
                                         New Test
                                     </NavLink>
-                                </NavButton>
-                                <NavButton>
+                                </NavButton >
+                                <NavButton onClick={handleResponsiveMenuToggle}>
                                     <NavLink to='/vote' className={({ isActive }) => (isActive ? 'active-link' : 'inactive-link')}>
                                         Vote
                                     </NavLink>
@@ -50,7 +63,7 @@ export default function Header() {
                             </>
                             :
                             <>
-                                <NavButton>
+                                <NavButton onClick={handleResponsiveMenuToggle}>
                                     <a href='#application' className={'inactive-link'}>
                                         Application
                                     </a>

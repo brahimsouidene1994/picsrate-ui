@@ -12,5 +12,9 @@ export const NavButton = Styled.text`
   transition: all 0.3s ease; /* Smooth transition for hover effect */
   &:hover {
     font-weight: bold;
+  };
+  @media only screen and (max-width: 960px) {
+   padding: 20px 0;
   }
+
 `;
