@@ -15,6 +15,7 @@ import { roundNumber, wait } from "../../utils/utilities";
 import AlertUi from "../../components/ui/AlertUi";
 import { useAuth } from "react-oidc-context";
 import DialogUi from "components/ui/DialogUi";
+import '../../assets/styles/Details.css';
 export default function Details() {
     const oidc = useAuth();
     const { id } = useParams();
@@ -59,7 +60,7 @@ export default function Details() {
                             if (res) {
                                 setVotes(res);
                                 if (res.length === 0) {
-                                    setVotingResultText('No voters yet')
+                                    setVotingResultText('0')
                                 } else {
                                     voteFormula(res);
                                 }
@@ -74,7 +75,7 @@ export default function Details() {
     const voteFormula = (arrayVotes: CommentObject[]) => {
         if (arrayVotes === null) return;
         if (arrayVotes.length === 0) {
-            setVotingResultText('No voters yet');
+            setVotingResultText('0');
             setVotingResultMoy(0);
         }
         if (arrayVotes.length > 0) {
@@ -188,16 +189,16 @@ export default function Details() {
             {alertVisibility &&
                 <AlertUi updateResponse={updateResponse} message={alertMessage} handleVisibility={setAlertVisibility} top={"-40px"} height={"80px"} width={"40%"}/>
             }
-            <Box sx={{ width: '70%', paddingLeft: 8 }}>
+            <div className='back-container'>
                 <IconButton aria-label="go back" onClick={() => navigate(-1)}>
                     <FaArrowLeft size={28} color="#0B192C" />
                 </IconButton>
-            </Box>
+            </div>
             {currentPicture &&
-                <Box sx={{ width: '70%', display: 'flex', flexDirection: 'column' }}>
+                <div className='body-section'>
                     <Box sx={{ width: '100%', paddingLeft: 8, paddingRight: 8, paddingTop: 5 }}>
                         <Box sx={{
-                            width: '100%', height: '90px', display: 'flex', padding: '10px', justifyContent: 'center',
+                            width: '100%', height: 'auto', display: 'flex', padding: '10px', justifyContent: 'center',
                             border: '2px solid transparent',
                             transition: 'box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out',
                             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -223,7 +224,7 @@ export default function Details() {
                                 <Typography sx={{ fontFamily: 'Roboto,sans-serif', fontSize: '1.4rem' }}>{votingResultText}</Typography>
                             </Box>
                             <Divider orientation="vertical" variant="middle" flexItem />
-                            <Box sx={{ width: '60%', display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                            <div className='actions-btns'>
                                 <Tooltip title={currentPicture.status ? "Must stop the test first" : "Delete the test"}>
                                     <span>
                                         <LoadingButton
@@ -252,12 +253,12 @@ export default function Details() {
                                 >
                                     {currentPicture.status ? 'Pause' : 'Play'}
                                 </LoadingButton>
-                            </Box>
+                            </div>
                         </Box>
                     </Box>
                     <Box sx={{ width: '100%', paddingLeft: 8, paddingRight: 8 }}>
-                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', paddingTop: 2, paddingBottom: 2 }}>
-                            <Box sx={{ width: '45%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 5, paddingBottom: 5, paddingRight: 5 }}>
+                        <div className='details-section'>
+                            <div className='details-section-img'>
                                 <Box sx={{ height: '2.5rem', width: '100%', backgroundColor: '#0B192C' }}>
                                     <Typography sx={{ fontSize: '1.7rem', color: '#fff', textAlign: 'center' }}>{currentPicture.category}</Typography>
                                 </Box>
@@ -272,7 +273,7 @@ export default function Details() {
                                         <Typography sx={{ fontSize: '1.5rem', color: '#0B192C', textAlign: 'start', textTransform: 'capitalize' }}>{formatDate(currentPicture.createdAt)}</Typography>
                                     </Box>
                                 </Box>
-                            </Box>
+                            </div>
                             <Divider orientation="vertical" variant="middle" flexItem />
                             <Box sx={{ width: '90%', padding: 5 }}>
                                 {currentPicture.voters?.length ?
@@ -285,9 +286,9 @@ export default function Details() {
                                     </Box>
                                 }
                             </Box>
-                        </Box>
+                        </div>
                     </Box>
-                </Box>
+                </div>
             }
             <DialogUi deletePicture={deletePicture} deleteResponse={deleteResponse} deleteResponseMessage={deleteResponseMessage} handleClose={handleClose} showDialog={showDialog} />
         </Box>

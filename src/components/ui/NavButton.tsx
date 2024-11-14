@@ -14,7 +14,8 @@ export const NavButton = Styled.text`
     font-weight: bold;
   };
   @media only screen and (max-width: 960px) {
-   padding: 20px 0;
+    padding: 20px 0;
+    font-weight: bold;
   }
 
 `;

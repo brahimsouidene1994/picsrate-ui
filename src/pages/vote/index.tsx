@@ -10,6 +10,7 @@ import { LoadingButton } from "@mui/lab";
 import CommentObject from "services/models/comment";
 import CommentService from "services/api/comment";
 import { useAuth } from "react-oidc-context";
+import '../../assets/styles/Vote.css';
 
 export default function Vote() {
     const oidc = useAuth();
@@ -58,7 +59,7 @@ export default function Vote() {
 
     return (
         <Box sx={{width: '100vw',minHeight:'70vh',display: 'flex',justifyContent: 'center',padding: 3}}>
-            <Box sx={{ width: '70%', paddingLeft: 8, paddingRight: 8 }}>
+            <div className='vote-content'>
                 <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', paddingTop: 2, paddingBottom: 2 }}>
                     <Box sx={{ width: '45%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 5, paddingBottom: 5, paddingRight: 5 }}>
                         {randomPicture ?
@@ -77,7 +78,7 @@ export default function Vote() {
                         }
                     </Box>
                     <Divider orientation="vertical" variant="middle" flexItem />
-                    <Box sx={{ width: '80%', padding: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div className='slider-section'>
                         <Slider label={TRAIT.ATTRACTIVE} handleChange={setVoteOne} color_bar={TraitColors.COMPETENT} />
                         <Slider label={TRAIT.AUTHENTIC} handleChange={setVoteTwo} color_bar={TraitColors.INFLUENTIAL} />
                         <Slider label={TRAIT.LIKEBLE} handleChange={setVoteThree} color_bar={TraitColors.LIKEBLE} />
@@ -124,9 +125,9 @@ export default function Vote() {
                                 Submit
                             </LoadingButton>
                         </Box>
-                    </Box>
+                    </div>
                 </Box>
-            </Box>
+            </div>
         </Box>
     )
 }

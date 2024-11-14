@@ -1,0 +1,15 @@
+.slider-item{
+    width: 70%;
+    margin-top: 40px;
+    display: flex
+}
+
+@media only screen and (max-width: 960px) {
+    .slider-item{
+        width: 90%;
+        flex-direction: column;
+    }
+    .slider-item :nth-child(2){
+        width: 100%;
+    }
+}

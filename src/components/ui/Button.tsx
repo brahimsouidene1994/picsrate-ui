@@ -1,6 +1,6 @@
 import Styled from 'styled-components';
 
-export const  ButtonContainer = Styled.button`
+export const ButtonContainer = Styled.button`
     text-transform : capitalize;
     font-size : 1.4rem;
     background : #fff;
@@ -18,7 +18,7 @@ export const  ButtonContainer = Styled.button`
     &:hover{
         font-weight:bolder;
     }
-`; 
+`;
 
 export const SignUpButton = Styled.button`
   background: linear-gradient(to right, #2876cf, #9d48bb); /* Primary background color */
@@ -34,5 +34,8 @@ export const SignUpButton = Styled.button`
     background: none;
     color: #0B192C;
     border: 1px solid #0B192C; /* Turns into outlined on hover */
+  };
+  @media only screen and (max-width: 960px) {
+    margin: 20px 0;
   }
 `;

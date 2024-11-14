@@ -1,0 +1,12 @@
+.home-content{
+    width: 70%;
+    background-color: '#fff';
+    display: flex;
+    align-items: 'self-start';
+    justify-content: center
+}
+@media only screen and (max-width: 960px) {
+    .home-content{
+        width: 90%;
+    }
+}

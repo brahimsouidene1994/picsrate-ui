@@ -8,11 +8,18 @@ import { Box, ImageList, ImageListItem, ImageListItemBar, Typography } from '@mu
 import { FaCircle } from "react-icons/fa6";
 import { useAuth } from "react-oidc-context";
 import Img from 'components/ui/Img';
+import '../../assets/styles/Home.css'
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 export default function Home() {
   const oidc = useAuth();
   const navigate = useNavigate();
   const dispatch = useAppDispatch()
   const album = useAppSelector(state => state.album.value)
+  const theme = useTheme();
+
+  // Check for specific breakpoints
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md')); // for small screens (e.g., mobile)
 
   React.useEffect(() => {
     if (album.length === 0) {
@@ -36,8 +43,8 @@ export default function Home() {
   }
   return (
     <Box sx={{width: '100vw',minHeight:'70vh',display: 'flex',justifyContent: 'center',padding: 3}}>
-      <Box sx={{width: '70%',backgroundColor: '#fff',display: 'flex',alignItems:'self-start',justifyContent: 'center'}}>
-        <ImageList sx={{ width: '90%', overflowY: 'hidden', paddingBottom: 10, paddingTop: 10 }} variant="woven" cols={3} gap={16}>
+      <div className='home-content'>
+        <ImageList sx={{ width: '90%', overflowY: 'hidden', paddingBottom: 10, paddingTop: 10 }} variant="woven" cols={isSmallScreen?2:3} gap={16}>
           <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Box sx={{
               width: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
@@ -144,7 +151,7 @@ export default function Home() {
             </ImageListItem>
           ))}
         </ImageList>
-      </Box>
+      </div>
     </Box>
   )
 }

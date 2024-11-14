@@ -1,0 +1,22 @@
+.vote-content {
+    width: 70%;
+    padding-left: 64;
+    padding-right: 64
+}
+
+.slider-section {
+    width: 80%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+@media only screen and (max-width: 960px) {
+    .vote-content {
+        width: 90%;
+    }
+    .slider-section{
+        padding: 0
+    }
+}

@@ -182,7 +182,7 @@ export default function NewTest() {
 
     return (
         <Box sx={{ width: '100vw', minHeight: '70vh', display: 'flex', justifyContent: 'center', paddingTop: 5, paddingBottom:5 }}>
-            <Box sx={{ width: '70%', marginTop: 4 }}>
+            <div className='container-form-test'>
                 <Stepper activeStep={activeStep}>
                     {steps.map((label, index) => {
                         const stepProps: { completed?: boolean } = {};
@@ -290,7 +290,7 @@ export default function NewTest() {
                                     </div>
                                     {category &&
                                         <div className='step-content-traits'>
-                                            <Typography style={{ fontSize: 28, textAlign: 'center', fontFamily: 'Roboto, sans-serif' }}>Traits:</Typography>
+                                            <Typography style={{ fontSize: '2rem', textAlign: 'center', fontFamily: 'Roboto, sans-serif' }}>Traits:</Typography>
                                             <TraitCategory category={category} />
                                         </div>
                                     }
@@ -357,7 +357,7 @@ export default function NewTest() {
                         </Box>
                     </React.Fragment>
                 )}
-            </Box>
+            </div>
         </Box>
     );
 }
