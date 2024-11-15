@@ -10,7 +10,13 @@ import { Box, Typography } from '@mui/material';
 import TestDetails from '../../components/ui/TestDetails';
 import TestCards from '../../components/ui/TestCards';
 import { FakeVotes } from '../../utils/FakeData';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 export default function Acceuil() {
+    const theme = useTheme();
+
+    // Check for specific breakpoints
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm')); // for small screens (e.g., mobile)
     return (
         <div className='acceuil'>
             <div className='section-one'>
@@ -38,9 +44,9 @@ export default function Acceuil() {
 
             </div>
             <div className='section-four'>
-                <Box sx={{ display: 'flex', flexDirection: 'column', height: '70vh' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', height: isSmallScreen?'atuo':'70vh'}}>
                     <Typography sx={{ textAlign: 'center', fontSize: 64, fontFamily: 'Roboto,sans-serif', padding: '32px 0', color: '#5f1479', fontWeight: 'bold' }}>What Category</Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+                    <Box sx={{ display: 'flex', flexDirection: isSmallScreen?'column':'row', height: '100%' }}>
                         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                             <Typo text={CATEGORY.BUSINESS} size={32} bold={true} />
                             <img src={BagImg} style={{ width: '20%', height: 'auto' }} alt='card-image' />

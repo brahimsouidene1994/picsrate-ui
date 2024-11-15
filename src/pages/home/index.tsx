@@ -20,12 +20,19 @@ export default function Home() {
 
   // Check for specific breakpoints
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('md')); // for small screens (e.g., mobile)
+  const isMobileScreen = useMediaQuery(theme.breakpoints.down('sm')); // for small screens (e.g., mobile)
 
   React.useEffect(() => {
     if (album.length === 0) {
       getAlbum()
     }
   }, [album])
+
+  const getCols = ():number =>{
+    if(isMobileScreen) return 1;
+    if(isSmallScreen) return 2;
+    return 3;
+  }
 
   const getAlbum = (): void => {
 
@@ -44,7 +51,7 @@ export default function Home() {
   return (
     <Box sx={{width: '100vw',minHeight:'70vh',display: 'flex',justifyContent: 'center',padding: 3}}>
       <div className='home-content'>
-        <ImageList sx={{ width: '90%', overflowY: 'hidden', paddingBottom: 10, paddingTop: 10 }} variant="woven" cols={isSmallScreen?2:3} gap={16}>
+        <ImageList sx={{ width: '90%', overflowY: 'hidden', paddingBottom: 10, paddingTop: 10 }} variant="woven" cols={getCols()} gap={16}>
           <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Box sx={{
               width: '50%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',

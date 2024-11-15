@@ -5,8 +5,13 @@
 
 }
 
-@media only screen and (max-width: 960px) {
+@media only screen and (max-width: 900px) {
     .traits{
-        flex-direction: column;
+        flex-direction: row;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .traits{
+        flex-direction: row;
     }
 }

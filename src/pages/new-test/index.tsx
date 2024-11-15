@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import '../../assets/styles/NewTest.css'
 import { CATEGORY } from 'services/models/contants/Category';
 import TraitCategory from '../../components/ui/TraitCategory';
-import { Alert, CircularProgress, Switch, TextField } from '@mui/material';
+import { Alert, CircularProgress, Switch, TextField, useMediaQuery, useTheme } from '@mui/material';
 import PictureService from 'services/api/picture';
 import AiService from 'services/api/ai';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -25,6 +25,7 @@ const steps = ['Select picture', 'Set the title', 'Submitting'];
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 export default function NewTest() {
     const oidc = useAuth();
+    const theme = useTheme();
     const navigate = useNavigate();
     const dispatch = useAppDispatch()
 
@@ -51,6 +52,9 @@ export default function NewTest() {
     const [aiResponse, setAiResponse] = React.useState<number>(-1);
     const [aiResponseMessage, setAiResponseMessage] = React.useState<string>('');
     const [alertVisibility, setAlertVisibility] = React.useState(false);
+
+
+    const isMobileScreen = useMediaQuery(theme.breakpoints.down('md')); // for small screens (e.g., mobile)
 
     React.useEffect(() => {
         if (activeStep === steps.length - 1) {
@@ -181,7 +185,7 @@ export default function NewTest() {
     }
 
     return (
-        <Box sx={{ width: '100vw', minHeight: '70vh', display: 'flex', justifyContent: 'center', paddingTop: 5, paddingBottom:5 }}>
+        <Box sx={{ width: '100vw', minHeight: isMobileScreen?'70vh':'auto', display: 'flex', justifyContent: 'center', paddingTop: 5, paddingBottom:5 }}>
             <div className='container-form-test'>
                 <Stepper activeStep={activeStep}>
                     {steps.map((label, index) => {
@@ -215,7 +219,7 @@ export default function NewTest() {
                     </React.Fragment>
                 ) : (
                     <React.Fragment>
-                        <div className='form-test'>
+                        <Box sx={{width: '100%',height: isMobileScreen?'auto':'412px',display: 'flex',flexDirection:isMobileScreen?'column':'row',alignItems: 'center',justifyContent: 'space-around',padding: '20px'}}>
                             <div className='step-picture'>
                                 {aiLoading ?
                                     <Box sx={{display:'flex',flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
@@ -340,7 +344,7 @@ export default function NewTest() {
                                     }
                                 </div>
                             }
-                        </div>
+                        </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                             <Button
                                 color="inherit"

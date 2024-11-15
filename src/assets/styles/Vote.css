@@ -20,3 +20,13 @@
         padding: 0
     }
 }
+
+@media only screen and (max-width: 960px) {
+    .vote-content {
+        width: 90%;
+    }
+    .slider-section{
+        width: 100%;
+        padding: 0
+    }
+}

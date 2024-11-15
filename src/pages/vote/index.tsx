@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Divider, TextField, Typography } from "@mui/material";
+import { Box, CircularProgress, Divider, TextField, Typography, useMediaQuery, useTheme } from "@mui/material";
 import PictureObject from "services/models/picture";
 import React from "react";
 import PictureService from 'services/api/picture';
@@ -13,6 +13,8 @@ import { useAuth } from "react-oidc-context";
 import '../../assets/styles/Vote.css';
 
 export default function Vote() {
+
+    const theme = useTheme();
     const oidc = useAuth();
     const [randomPicture, setRandomPicture] = React.useState<PictureObject | null>(null);
     const [note, setNote] = React.useState<string | null>('');
@@ -20,6 +22,7 @@ export default function Vote() {
     const [voteTow, setVoteTwo] = React.useState<number>(0);
     const [voteThree, setVoteThree] = React.useState<number>(0);
     const [loading, setLoading] = React.useState<boolean>(false);
+    const isMobileScreen = useMediaQuery(theme.breakpoints.down('sm')); // for small screens (e.g., mobile)
     React.useEffect(() => {
         pickPictureRandomly();
     }, []);
@@ -60,8 +63,8 @@ export default function Vote() {
     return (
         <Box sx={{width: '100vw',minHeight:'70vh',display: 'flex',justifyContent: 'center',padding: 3}}>
             <div className='vote-content'>
-                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', paddingTop: 2, paddingBottom: 2 }}>
-                    <Box sx={{ width: '45%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 5, paddingBottom: 5, paddingRight: 5 }}>
+                <Box sx={{ width: '100%', display: 'flex',flexDirection:isMobileScreen?'column':'row', justifyContent: 'center', paddingTop: 2, paddingBottom: 2 }}>
+                    <Box sx={{ width: isMobileScreen?'100%':'45%', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 5, paddingBottom: 5, paddingRight: isMobileScreen?0:5 }}>
                         {randomPicture ?
                             <React.Fragment>
                                 <Box sx={{ height: '2.5rem', width: '100%', backgroundColor: '#0B192C' }}>
@@ -83,7 +86,7 @@ export default function Vote() {
                         <Slider label={TRAIT.AUTHENTIC} handleChange={setVoteTwo} color_bar={TraitColors.INFLUENTIAL} />
                         <Slider label={TRAIT.LIKEBLE} handleChange={setVoteThree} color_bar={TraitColors.LIKEBLE} />
                         {randomPicture && randomPicture.commentsStatus &&
-                            <TextField id="outlined-basic" label="Note (optional)" value={note} variant="standard" size={'medium'} onChange={(e) => setNote(e.target.value)} style={{ width: '70%', marginTop: 40, marginBottom: 40 }}
+                            <TextField id="outlined-basic" label="Note (optional)" value={note} variant="standard" size={'medium'} onChange={(e) => setNote(e.target.value)} style={{ width: isMobileScreen?'90%':'70%', marginTop: 40, marginBottom: 40 }}
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         height: '60px',
