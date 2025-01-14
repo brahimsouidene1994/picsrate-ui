@@ -10,7 +10,13 @@ import { Box, Typography } from '@mui/material';
 import TestDetails from '../../components/ui/TestDetails';
 import TestCards from '../../components/ui/TestCards';
 import { FakeVotes } from '../../utils/FakeData';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 export default function Acceuil() {
+    const theme = useTheme();
+
+    // Check for specific breakpoints
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm')); // for small screens (e.g., mobile)
     return (
         <div className='acceuil'>
             <div className='section-one'>
@@ -19,31 +25,28 @@ export default function Acceuil() {
                     <div className='dots-two'></div>
                     <TestCards />
                 </div>
-                <div className='separator'></div>
                 <div className='second'>
                     <h1 className='title'>Struggling to select the right picture ?</h1>
                     <span className='desc'>Just upload your picture and let the community decide for you</span>
                 </div>
             </div>
-            <div className='section-three'>
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
-                    <Box sx={{ width: '90%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Box sx={{ width: '50%', paddingLeft: 8, paddingRight: 8 }}>
-                            <Typo text={'How it works'} size={64} bold={true} />
-                            <Typo text={'Follow Up Tests'} size={32} bold={false} />
-                            <Typo text={'Consult Statistiques'} size={32} bold={false} />
-                            <Typo text={'Receive feedbacks'} size={32} bold={false} />
-                        </Box>
-                        <div className='second'>
-                            <TestDetails path={BusinessImg} category={CATEGORY.BUSINESS} context={'Work Interview'} createDate={'2024-05-23'} votes={FakeVotes} />
-                        </div>
-                    </Box>
-                </Box>
+            <div className='section-two'>
+                <div className='first'>
+                    <Typo text={'How it works'} size={64} bold={true} />
+                    <Typo text={'Follow Up Tests'} size={32} bold={false} />
+                    <Typo text={'Consult Statistiques'} size={32} bold={false} />
+                    <Typo text={'Receive feedbacks'} size={32} bold={false} />
+                </div>
+                <div className='second'>
+                    <TestDetails path={BusinessImg} category={CATEGORY.BUSINESS} context={'Work Interview'} createDate={'2024-05-23'} votes={FakeVotes} />
+                </div>
+
+
             </div>
             <div className='section-four'>
-                <Box sx={{ display: 'flex', flexDirection: 'column', height: '70vh' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', height: isSmallScreen?'atuo':'70vh'}}>
                     <Typography sx={{ textAlign: 'center', fontSize: 64, fontFamily: 'Roboto,sans-serif', padding: '32px 0', color: '#5f1479', fontWeight: 'bold' }}>What Category</Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+                    <Box sx={{ display: 'flex', flexDirection: isSmallScreen?'column':'row', height: '100%' }}>
                         <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                             <Typo text={CATEGORY.BUSINESS} size={32} bold={true} />
                             <img src={BagImg} style={{ width: '20%', height: 'auto' }} alt='card-image' />

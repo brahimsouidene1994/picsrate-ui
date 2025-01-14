@@ -8,40 +8,53 @@ import Typography from '@mui/material/Typography';
 import '../../assets/styles/NewTest.css'
 import { CATEGORY } from 'services/models/contants/Category';
 import TraitCategory from '../../components/ui/TraitCategory';
-import { Alert, CircularProgress, Switch, TextField } from '@mui/material';
+import { Alert, CircularProgress, Switch, TextField, useMediaQuery, useTheme } from '@mui/material';
 import PictureService from 'services/api/picture';
+import AiService from 'services/api/ai';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/stateHooks';
 import { addOneToAlbum } from 'services/state/reducers/album';
 import PictureObject from 'services/models/picture';
 import { useAuth } from "react-oidc-context";
+import AlertUi from 'components/ui/AlertUi';
+import { wait } from "../../utils/utilities";
 
 const steps = ['Select picture', 'Set the title', 'Submitting'];
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 export default function NewTest() {
     const oidc = useAuth();
+    const theme = useTheme();
     const navigate = useNavigate();
     const dispatch = useAppDispatch()
 
     // response
-    const [loading, setLoading] = React.useState(false);
-    const [responseStatus, setResponseStatus] = React.useState(false);
-    const [responseMessage, setResponseMessage] = React.useState('');
+    const [loading, setLoading] = React.useState<boolean>(false);
+    const [responseStatus, setResponseStatus] = React.useState<boolean>(false);
+    const [responseMessage, setResponseMessage] = React.useState<string>('');
     const [newPicture, setNewPicture] = React.useState<PictureObject | null>(null);
 
     // picture
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
     const [previewPicture, setPreviewPicture] = React.useState<string | null>(null);
     const [category, setCategory] = React.useState<string>('');
-    const [title, setTitle] = React.useState('');
-    const [commentStatus, setCommentStatus] = React.useState(true);
+    const [title, setTitle] = React.useState<string>('');
+    const [commentStatus, setCommentStatus] = React.useState<boolean>(true);
 
     // tabs
-    const [nextTab, setNextTab] = React.useState(true);
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [stepBacked, setStepBacked] = React.useState(false);
+    const [nextTab, setNextTab] = React.useState<boolean>(true);
+    const [activeStep, setActiveStep] = React.useState<number>(0);
+    const [stepBacked, setStepBacked] = React.useState<boolean>(false);
+
+    // ai
+    const [aiLoading, setAiLoading] = React.useState<boolean>(false);
+    const [aiResponse, setAiResponse] = React.useState<number>(-1);
+    const [aiResponseMessage, setAiResponseMessage] = React.useState<string>('');
+    const [alertVisibility, setAlertVisibility] = React.useState(false);
+
+
+    const isMobileScreen = useMediaQuery(theme.breakpoints.down('md')); // for small screens (e.g., mobile)
 
     React.useEffect(() => {
         if (activeStep === steps.length - 1) {
@@ -121,9 +134,27 @@ export default function NewTest() {
 
         // Create a preview if a file is selected
         if (selectedFile) {
-            const objectUrl = URL.createObjectURL(selectedFile);
-            console.log(objectUrl)
-            setPreviewPicture(objectUrl);
+            setAiLoading(true)
+            AiService.scanPicture(selectedFile, category)
+                .then((response: number) => {
+                    console.log("handleFileChange", response)
+                    setAiLoading(false)
+                    setAiResponse(response)
+                    if (response > 0) {
+                        const objectUrl = URL.createObjectURL(selectedFile);
+                        setPreviewPicture(objectUrl);
+                    } else if (response === 0) {
+                        setAlertVisibility(true)
+                        handleAlertVisibility()
+                        setAiResponseMessage("Picture not appropriate")
+                        setPreviewPicture(null);
+                        setNextTab(true);
+                    }
+                    else {
+                        setPreviewPicture(null);
+                        setNextTab(true);
+                    }
+                })
             if (category) setNextTab(false)
         } else {
             setPreviewPicture(null);
@@ -149,9 +180,13 @@ export default function NewTest() {
         setCommentStatus(event.target.checked)
     }
 
+    const handleAlertVisibility = () => {
+        wait(5000).then(() => setAlertVisibility(false));
+    }
+
     return (
-        <Box sx={{width: '100vw',minHeight:'70vh',display: 'flex',justifyContent: 'center',padding: 3}}>
-            <Box sx={{ width: '70%' , marginTop:4}}>
+        <Box sx={{ width: '100vw', minHeight: isMobileScreen?'70vh':'auto', display: 'flex', justifyContent: 'center', paddingTop: 5, paddingBottom:5 }}>
+            <div className='container-form-test'>
                 <Stepper activeStep={activeStep}>
                     {steps.map((label, index) => {
                         const stepProps: { completed?: boolean } = {};
@@ -184,48 +219,68 @@ export default function NewTest() {
                     </React.Fragment>
                 ) : (
                     <React.Fragment>
-                        <div className='form-test'>
+                        <Box sx={{width: '100%',height: isMobileScreen?'auto':'412px',display: 'flex',flexDirection:isMobileScreen?'column':'row',alignItems: 'center',justifyContent: 'space-around',padding: '20px'}}>
                             <div className='step-picture'>
-                                {!previewPicture ?
-                                    <div className='picture-uploader'>
-                                        <label htmlFor="contained-button-file">
-                                            <Button variant="contained" component="span">
-                                                Upload Image
-                                                <input
-                                                    accept="image/*"
-                                                    style={{ display: 'none' }}
-                                                    id="contained-button-file"
-                                                    multiple
-                                                    type="file"
-                                                    onChange={handleFileChange}
-                                                />
-                                            </Button>
-                                        </label>
-
-                                    </div>
+                                {aiLoading ?
+                                    <Box sx={{display:'flex',flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
+                                        <CircularProgress />
+                                        <Typography>Ai Scanning</Typography>
+                                    </Box>
                                     :
-                                    <div className='picture-loaded'>
-                                        <img
-                                            width="100%"
-                                            style={{ height: activeStep === 0 ? '100%' : '80%', width: '70%' }}
-                                            src={previewPicture}
-                                        />
-                                        {activeStep === 0 &&
-                                            <label htmlFor="contained-button-file" style={{ marginTop: 20 }}>
+                                    <>
+                                        {aiResponse <= 0 ?
+                                            <>
+                                                <div className='picture-uploader'>
+                                                    <label htmlFor="contained-button-file">
+                                                        <Button variant="contained" component="span">
+                                                            Upload Picture
+                                                            <input
+                                                                accept="image/*"
+                                                                style={{ display: 'none' }}
+                                                                id="contained-button-file"
+                                                                multiple
+                                                                type="file"
+                                                                onChange={handleFileChange}
+                                                            />
+                                                        </Button>
+                                                    </label>
 
-                                                <Button variant="contained" component="span">
-                                                    Select Image
-                                                    <input
-                                                        accept="image/*"
-                                                        style={{ display: 'none' }}
-                                                        id="contained-button-file"
-                                                        multiple
-                                                        type="file"
-                                                        onChange={handleFileChange}
-                                                    />
-                                                </Button>
-                                            </label>}
-                                    </div>
+                                                </div>
+                                                {alertVisibility &&
+                                                    <AlertUi updateResponse={false} message={aiResponseMessage} handleVisibility={setAlertVisibility} top={"100%"} height={"48px"} width={"70%"}/>
+                                                }
+                                            </>
+
+                                            :
+                                            <>
+                                                {previewPicture &&
+                                                    <div className='picture-loaded'>
+                                                        <img
+                                                            width="100%"
+                                                            alt="preview-picture"
+                                                            style={{ height: activeStep === 0 ? '100%' : '80%', width: '70%' }}
+                                                            src={previewPicture}
+                                                        />
+                                                        {activeStep === 0 &&
+                                                            <label htmlFor="contained-button-file" style={{ marginTop: 20 }}>
+
+                                                                <Button variant="contained" component="span">
+                                                                    Change Image
+                                                                    <input
+                                                                        accept="image/*"
+                                                                        style={{ display: 'none' }}
+                                                                        id="contained-button-file"
+                                                                        multiple
+                                                                        type="file"
+                                                                        onChange={handleFileChange}
+                                                                    />
+                                                                </Button>
+                                                            </label>}
+                                                    </div>
+                                                }
+                                            </>
+                                        }
+                                    </>
                                 }
                             </div>
                             <div className='step-separator'></div>
@@ -239,7 +294,7 @@ export default function NewTest() {
                                     </div>
                                     {category &&
                                         <div className='step-content-traits'>
-                                            <Typography style={{ fontSize: 28, textAlign: 'center', fontFamily: 'Roboto, sans-serif' }}>Traits:</Typography>
+                                            <Typography style={{ fontSize: '2rem', textAlign: 'center', fontFamily: 'Roboto, sans-serif' }}>Traits:</Typography>
                                             <TraitCategory category={category} />
                                         </div>
                                     }
@@ -289,7 +344,7 @@ export default function NewTest() {
                                     }
                                 </div>
                             }
-                        </div>
+                        </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                             <Button
                                 color="inherit"
@@ -306,7 +361,7 @@ export default function NewTest() {
                         </Box>
                     </React.Fragment>
                 )}
-            </Box>
+            </div>
         </Box>
     );
 }

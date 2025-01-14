@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { IOSSlider } from "./MStyledUi";
+import '../../assets/styles/Slider.css';
 
 type SliderProps = {
     label: string,
@@ -39,7 +40,7 @@ export default function Slider({ label, handleChange,color_bar}: SliderProps) {
         handleChange(newValue as number);
     };
     return (
-        <Box sx={{ width: '70%', marginTop: '40px', display: 'flex' }}>
+        <div className='slider-item'>
             <Typography sx={{ width: '30%', fontSize: '1.5rem', fontFamily: 'Roboto, sans-serif' }}>{label}</Typography>
             <IOSSlider
                 sx={{ width: '70%' }}
@@ -55,6 +56,6 @@ export default function Slider({ label, handleChange,color_bar}: SliderProps) {
                 marks={marks}
                 color_bar={color_bar}         
                 />
-        </Box>
+        </div>
     )
 }

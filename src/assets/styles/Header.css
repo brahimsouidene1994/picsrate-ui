@@ -1,10 +1,11 @@
-.header{
+.header {
     background: #fff;
     max-width: 100%;
     height: 60px;
     z-index: 5;
 }
-.header-content{
+
+.header-content {
     position: relative;
     height: 100%;
     width: 100%;
@@ -12,28 +13,32 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
-    border-bottom: 1px solid #333; /* Border bottom color and thickness */
+    border-bottom: 1px solid #333;
+    /* Border bottom color and thickness */
     box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.5);
 }
-.header .header-content .header-logo{
+
+.header .header-content .header-logo {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.header .header-content img{
+
+.header .header-content img {
     object-fit: contain;
 }
 
-.header .header-content h1{
+.header .header-content h1 {
     height: 100%;
-    font-family: Roboto,sans-serif;
+    font-family: Roboto, sans-serif;
     font-size: 2rem;
     color: #0B192C;
     line-height: 4.5rem;
 }
-.header-navigation{
+
+.header-navigation {
     width: 100%;
     height: 100%;
     display: flex;
@@ -41,9 +46,11 @@
     align-items: center;
     justify-content: center;
 }
+
 /* Add this CSS in your stylesheet */
 .active-link {
-    color: #000; /* Example color for active link */
+    color: #000;
+    /* Example color for active link */
     font-weight: bold;
     text-decoration: none;
     border-bottom: 2px solid #000;
@@ -52,13 +59,50 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}
+
 .inactive-link {
-    color: #000000; /* Example color for active link */
+    color: #000000;
+    /* Example color for active link */
     text-decoration: none;
     height: 100%;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}
+
+@media only screen and (max-width: 960px) {
+    .line{
+        width: 40px;
+        height: 5px;
+        background: #2b639d;
+        margin-top: 5px;
+    }
+    .hamburger{
+        position: absolute;
+        right: 5%;
+        top: 25%;
+        z-index: 2;
+        cursor: pointer;
+    }
+    .header-navigation{
+        background: rgba(255, 255, 255, 0.8);
+        position: fixed;
+        width: 40%;
+        height: auto !important;
+        right: 0;
+        padding: 16px 0;
+        flex-direction: column;
+        clip-path: circle(100px at 90% -20%);
+        -webkit-clip-path : circle(100px at 90% -20%);
+        transition: all 1s ease-in-out;
+        border-radius: 10px;
+        box-shadow: 0 2px 2px -2px rgba(0, 0, 0, 0.5);
+    }
+    .header-navigation.open{
+        clip-path: circle(1500px at 90% -20%);
+        -webkit-clip-path : circle(1500px at 90% -20%);
+        transform: translate(-8%,45%);
+    }
+}
